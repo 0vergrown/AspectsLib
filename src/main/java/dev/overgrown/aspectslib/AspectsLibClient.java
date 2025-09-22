@@ -4,6 +4,7 @@ import dev.overgrown.aspectslib.client.AspectsTooltipConfig;
 import dev.overgrown.aspectslib.client.tooltip.AspectTooltipComponent;
 import dev.overgrown.aspectslib.client.tooltip.AspectTooltipData;
 import dev.overgrown.aspectslib.data.*;
+import dev.overgrown.aspectslib.entity.aura_node.client.AuraNodeVisibilityConfig;
 import dev.overgrown.aspectslib.networking.SyncAspectIdentifierPacket;
 import dev.overgrown.aspectslib.registry.ModEntities;
 import dev.overgrown.aspectslib.entity.aura_node.render.AuraNodeRenderer;
@@ -11,6 +12,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -44,6 +47,9 @@ public class AspectsLibClient implements ClientModInitializer {
         // Initialize default tooltip visibility to hidden
         AspectsTooltipConfig.setAlwaysShow(false);
 
+        // Initialize default aura node visibility to hidden
+        AuraNodeVisibilityConfig.setAlwaysShow(false);
+
         EntityRendererRegistry.register(ModEntities.AURA_NODE, AuraNodeRenderer::new);
 
         // Register custom tooltip component
@@ -52,6 +58,13 @@ public class AspectsLibClient implements ClientModInitializer {
                 return new AspectTooltipComponent(aspectTooltipData);
             }
             return null;
+        });
+
+        // Add default visibility condition for aura nodes (same as tooltip - show when holding Shift)
+        AuraNodeVisibilityConfig.addVisibilityCondition((player, hasAspects) -> {
+            if (!hasAspects) return false;
+            MinecraftClient client = MinecraftClient.getInstance();
+            return client.currentScreen != null && Screen.hasShiftDown();
         });
 
         // Handle aspect data sync from server
@@ -75,13 +88,13 @@ public class AspectsLibClient implements ClientModInitializer {
                 client.execute(() -> {
                     AspectManager.NAME_TO_ID.clear();
                     AspectManager.NAME_TO_ID.putAll(finalNameMap);
-                    
+
                     if (!finalAspectMap.isEmpty()) {
                         ModRegistries.ASPECTS.clear();
                         ModRegistries.ASPECTS.putAll(finalAspectMap);
                     }
-                    
-                    AspectsLib.LOGGER.info("Synced {} aspects from server (name mappings: {})", 
+
+                    AspectsLib.LOGGER.info("Synced {} aspects from server (name mappings: {})",
                             finalAspectMap.size(), finalNameMap.size());
                 });
             } catch (Exception e) {
