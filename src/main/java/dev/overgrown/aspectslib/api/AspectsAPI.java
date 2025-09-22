@@ -1,7 +1,9 @@
 package dev.overgrown.aspectslib.api;
 
 import dev.overgrown.aspectslib.data.*;
+import dev.overgrown.aspectslib.entity.aura_node.client.AuraNodeVisibilityConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -9,6 +11,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.BiPredicate;
 
 /**
  * Public API for AspectsLib functionality.
@@ -157,5 +160,21 @@ public class AspectsAPI {
      */
     public static java.util.Map<Identifier, Aspect> getAllAspects() {
         return java.util.Collections.unmodifiableMap(ModRegistries.ASPECTS);
+    }
+
+    /**
+     * Adds a condition for when aura nodes should be fully visible.
+     * @param condition A predicate that takes a PlayerEntity and boolean indicating if the node has aspects
+     */
+    public static void addAuraNodeVisibilityCondition(BiPredicate<PlayerEntity, Boolean> condition) {
+        AuraNodeVisibilityConfig.addVisibilityCondition(condition);
+    }
+
+    /**
+     * Sets whether aura nodes should always be fully visible.
+     * @param alwaysShow true to always show nodes, false to use conditions
+     */
+    public static void setAuraNodesAlwaysVisible(boolean alwaysShow) {
+        AuraNodeVisibilityConfig.setAlwaysShow(alwaysShow);
     }
 }
