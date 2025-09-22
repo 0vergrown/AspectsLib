@@ -12,8 +12,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -47,7 +45,8 @@ public class AspectsLibClient implements ClientModInitializer {
         // Initialize default tooltip visibility to hidden
         AspectsTooltipConfig.setAlwaysShow(false);
 
-        // Initialize default aura node visibility to hidden
+        // Initialize aura node visibility to hidden by default
+        // No conditions are set by default - other mods must add them via API
         AuraNodeVisibilityConfig.setAlwaysShow(false);
 
         EntityRendererRegistry.register(ModEntities.AURA_NODE, AuraNodeRenderer::new);
@@ -58,13 +57,6 @@ public class AspectsLibClient implements ClientModInitializer {
                 return new AspectTooltipComponent(aspectTooltipData);
             }
             return null;
-        });
-
-        // Add default visibility condition for aura nodes (same as tooltip - show when holding Shift)
-        AuraNodeVisibilityConfig.addVisibilityCondition((player, hasAspects) -> {
-            if (!hasAspects) return false;
-            MinecraftClient client = MinecraftClient.getInstance();
-            return client.currentScreen != null && Screen.hasShiftDown();
         });
 
         // Handle aspect data sync from server
