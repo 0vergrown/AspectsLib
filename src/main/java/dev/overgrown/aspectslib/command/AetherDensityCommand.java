@@ -144,7 +144,7 @@ public class AetherDensityCommand {
                 for (Map.Entry<Identifier, Double> entry : finalDensity.getDensities().entrySet()) {
                     Formatting color = entry.getKey().equals(VITIUM_ASPECT) ? Formatting.RED : Formatting.GREEN;
                     player.sendMessage(Text.literal(
-                            String.format("  %s: %.2f", entry.getKey().toString(), entry.getValue())
+                            String.format("  %s: %.2f", entry.getKey(), entry.getValue())
                     ).formatted(color));
                 }
             }
