@@ -28,6 +28,10 @@ public class DynamicAetherDensityManager {
         return modifications.get(biomeId);
     }
 
+    public static Map<Identifier, Map<Identifier, Double>> getModificationsMap() {
+        return modifications;
+    }
+
     public static void reset() {
         modifications.clear();
     }

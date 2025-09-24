@@ -93,6 +93,11 @@ public class AspectsLib implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA)
                 .registerReloadListener(new StructureAetherDensityManager());
 
+        // Initialize Aether Density API
+        dev.overgrown.aspectslib.api.aether.AetherDensityAPI.setInstance(
+                new dev.overgrown.aspectslib.api.aether.AetherDensityAPIImpl()
+        );
+
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerWorld world : server.getWorlds()) {
                 CorruptionManager.tick(world);
