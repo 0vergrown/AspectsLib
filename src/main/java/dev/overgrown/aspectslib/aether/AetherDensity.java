@@ -2,6 +2,7 @@ package dev.overgrown.aspectslib.aether;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import dev.overgrown.aspectslib.AspectsLib;
 import net.minecraft.util.Identifier;
 
 import java.util.Collections;
@@ -24,12 +25,20 @@ public class AetherDensity {
         return Collections.unmodifiableMap(densities);
     }
 
+    public boolean isEmpty() {
+        return densities.isEmpty();
+    }
+
     public static AetherDensity fromJson(JsonObject json) {
         Map<Identifier, Double> densityMap = new HashMap<>();
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-            Identifier aspectId = new Identifier(entry.getKey());
-            double density = entry.getValue().getAsDouble();
-            densityMap.put(aspectId, density);
+            try {
+                Identifier aspectId = new Identifier(entry.getKey());
+                double density = entry.getValue().getAsDouble();
+                densityMap.put(aspectId, density);
+            } catch (Exception e) {
+                AspectsLib.LOGGER.warn("Invalid aspect density entry: {} = {}", entry.getKey(), entry.getValue());
+            }
         }
         return new AetherDensity(densityMap);
     }

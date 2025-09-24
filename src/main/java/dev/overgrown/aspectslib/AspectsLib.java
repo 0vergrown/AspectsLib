@@ -2,7 +2,7 @@ package dev.overgrown.aspectslib;
 
 import dev.overgrown.aspectslib.aether.BiomeAetherDensityManager;
 import dev.overgrown.aspectslib.aether.CorruptionManager;
-import dev.overgrown.aspectslib.aether.StructureAetherModifierManager;
+import dev.overgrown.aspectslib.aether.StructureAetherDensityManager;
 import dev.overgrown.aspectslib.command.AetherDensityCommand;
 import dev.overgrown.aspectslib.data.AspectManager;
 import dev.overgrown.aspectslib.data.CustomItemTagManager;
@@ -87,11 +87,11 @@ public class AspectsLib implements ModInitializer {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
 				.registerReloadListener(new EntityAspectManager());
 
-		// Register Aether density loaders
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
-				.registerReloadListener(new BiomeAetherDensityManager());
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
-				.registerReloadListener(new StructureAetherModifierManager());
+        // Register Aether density loaders
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA)
+                .registerReloadListener(new BiomeAetherDensityManager());
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA)
+                .registerReloadListener(new StructureAetherDensityManager());
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerWorld world : server.getWorlds()) {

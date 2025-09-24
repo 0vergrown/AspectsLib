@@ -4,21 +4,24 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.overgrown.aspectslib.AspectsLib;
-import dev.overgrown.aspectslib.aether.AetherDensity;
-import dev.overgrown.aspectslib.aether.AetherDensityManager;
-import dev.overgrown.aspectslib.aether.BiomeAetherDensityManager;
-import dev.overgrown.aspectslib.aether.CorruptionManager;
-import dev.overgrown.aspectslib.aether.DynamicAetherDensityManager;
+import dev.overgrown.aspectslib.aether.*;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.structure.StructureStart;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.Structure;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class AetherDensityCommand {
     private static final Identifier VITIUM_ASPECT = AspectsLib.identifier("vitium");
@@ -59,16 +62,21 @@ public class AetherDensityCommand {
 
     private static int execute(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        
+
         if (source.getEntity() instanceof ServerPlayerEntity player) {
             World world = player.getWorld();
             BlockPos pos = player.getBlockPos();
 
             Identifier biomeId = world.getBiome(pos).getKey().orElseThrow().getValue();
-            
+
             AetherDensity baseDensity = BiomeAetherDensityManager.DENSITY_MAP.get(biomeId);
-            
             AetherDensity density = AetherDensityManager.getDensity(world, pos);
+
+            // Check for structure density
+            AetherDensity structureDensity = AetherDensity.EMPTY;
+            if (world instanceof ServerWorld serverWorld) {
+                structureDensity = getStructureDensityAtPosition(serverWorld, pos);
+            }
 
             Map<Identifier, Double> modifications = DynamicAetherDensityManager.getModifications(biomeId);
 
@@ -137,6 +145,17 @@ public class AetherDensityCommand {
                     ));
                 }
             }
+
+            // Add structure information to report
+            if (structureDensity != AetherDensity.EMPTY) {
+                player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
+                player.sendMessage(Text.literal("Structure Density Override:").formatted(Formatting.LIGHT_PURPLE));
+                for (Map.Entry<Identifier, Double> entry : structureDensity.getDensities().entrySet()) {
+                    player.sendMessage(Text.literal(
+                            String.format("  %s: %.2f", entry.getKey().toString(), entry.getValue())
+                    ).formatted(Formatting.LIGHT_PURPLE));
+                }
+            }
             
             if (BiomeAetherDensityManager.DENSITY_MAP.isEmpty()) {
                 player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
@@ -148,6 +167,37 @@ public class AetherDensityCommand {
 
         source.sendError(Text.literal("This command can only be used by players"));
         return 0;
+    }
+
+    private static AetherDensity getStructureDensityAtPosition(ServerWorld world, BlockPos pos) {
+        for (Map.Entry<Identifier, AetherDensity> entry : StructureAetherDensityManager.DENSITY_MAP.entrySet()) {
+            Identifier structureId = entry.getKey();
+            AetherDensity structureDensity = entry.getValue();
+
+            if (isInsideStructure(world, pos, structureId)) {
+                return structureDensity;
+            }
+        }
+        return AetherDensity.EMPTY;
+    }
+
+    private static boolean isInsideStructure(ServerWorld world, BlockPos pos, Identifier structureId) {
+        try {
+            // Correct way to get structure entry in Minecraft 1.20.1
+            Optional<RegistryEntry.Reference<Structure>> structureEntry = world.getRegistryManager()
+                    .get(RegistryKeys.STRUCTURE)
+                    .getEntry(RegistryKey.of(RegistryKeys.STRUCTURE, structureId));
+
+            // Use hasKeyAndValue() instead of isEmpty()
+            if (structureEntry.isEmpty() || !structureEntry.get().hasKeyAndValue()) {
+                return false;
+            }
+
+            StructureStart structureStart = world.getStructureAccessor().getStructureAt(pos, structureEntry.get().value());
+            return structureStart != null && structureStart.hasChildren() && structureStart.getBoundingBox().contains(pos);
+        } catch (Exception e) {
+            return false;
+        }
     }
     
     private static int listDensities(CommandContext<ServerCommandSource> context) {
