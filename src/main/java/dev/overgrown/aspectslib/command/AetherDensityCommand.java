@@ -70,7 +70,6 @@ public class AetherDensityCommand {
             Identifier biomeId = world.getBiome(pos).getKey().orElseThrow().getValue();
 
             AetherDensity baseDensity = BiomeAetherDensityManager.DENSITY_MAP.get(biomeId);
-            AetherDensity density = AetherDensityManager.getDensity(world, pos);
 
             // Check for structure density
             AetherDensity structureDensity = AetherDensity.EMPTY;
@@ -78,12 +77,15 @@ public class AetherDensityCommand {
                 structureDensity = getStructureDensityAtPosition(serverWorld, pos);
             }
 
+            // Get the final calculated density (base + structure + modifications)
+            AetherDensity finalDensity = AetherDensityManager.getDensity(world, pos);
+
             Map<Identifier, Double> modifications = DynamicAetherDensityManager.getModifications(biomeId);
 
-            double vitium = density.getDensity(VITIUM_ASPECT);
+            double vitium = finalDensity.getDensity(VITIUM_ASPECT);
             double totalOtherAspects = 0.0;
 
-            for (Map.Entry<Identifier, Double> entry : density.getDensities().entrySet()) {
+            for (Map.Entry<Identifier, Double> entry : finalDensity.getDensities().entrySet()) {
                 if (!entry.getKey().equals(VITIUM_ASPECT)) {
                     totalOtherAspects += entry.getValue();
                 }
@@ -92,15 +94,15 @@ public class AetherDensityCommand {
             player.sendMessage(Text.literal("=== Aether Density Report ===").formatted(Formatting.GOLD));
             player.sendMessage(Text.literal("Position: " + pos.toShortString()).formatted(Formatting.GRAY));
             player.sendMessage(Text.literal("Biome: " + biomeId.toString()).formatted(Formatting.YELLOW));
-            
+
             player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
             player.sendMessage(Text.literal("Debug Info:").formatted(Formatting.LIGHT_PURPLE));
             player.sendMessage(Text.literal("  Loaded Biomes: " + BiomeAetherDensityManager.DENSITY_MAP.size()).formatted(Formatting.GRAY));
             player.sendMessage(Text.literal("  Has Base Density: " + (baseDensity != null ? "Yes" : "No")).formatted(Formatting.GRAY));
-            
+
             if (baseDensity != null && !baseDensity.getDensities().isEmpty()) {
                 player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
-                player.sendMessage(Text.literal("Base Density (from datapack):").formatted(Formatting.AQUA));
+                player.sendMessage(Text.literal("Base Biome Density:").formatted(Formatting.AQUA));
                 for (Map.Entry<Identifier, Double> entry : baseDensity.getDensities().entrySet()) {
                     player.sendMessage(Text.literal(
                             String.format("  %s: %.2f", entry.getKey().toString(), entry.getValue())
@@ -110,13 +112,36 @@ public class AetherDensityCommand {
                 player.sendMessage(Text.literal("  No base density found in datapack").formatted(Formatting.RED));
             }
 
+            // Show structure density if present
+            if (structureDensity != AetherDensity.EMPTY) {
+                player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
+                player.sendMessage(Text.literal("Structure Density (Additive Pocket):").formatted(Formatting.LIGHT_PURPLE));
+                for (Map.Entry<Identifier, Double> entry : structureDensity.getDensities().entrySet()) {
+                    player.sendMessage(Text.literal(
+                            String.format("  %s: +%.2f", entry.getKey().toString(), entry.getValue())
+                    ).formatted(Formatting.LIGHT_PURPLE));
+                }
+            }
+
+            if (modifications != null && !modifications.isEmpty()) {
+                player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
+                player.sendMessage(Text.literal("Dynamic Modifications:").formatted(Formatting.BLUE));
+
+                for (Map.Entry<Identifier, Double> entry : modifications.entrySet()) {
+                    String change = entry.getValue() >= 0 ? "+" : "";
+                    player.sendMessage(Text.literal(
+                            String.format("  %s: %s%.2f", entry.getKey().toString(), change, entry.getValue())
+                    ));
+                }
+            }
+
             player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
-            player.sendMessage(Text.literal("Final Calculated Density:").formatted(Formatting.GREEN));
-            
-            if (density.getDensities().isEmpty()) {
+            player.sendMessage(Text.literal("Final Combined Density:").formatted(Formatting.GREEN));
+
+            if (finalDensity.getDensities().isEmpty()) {
                 player.sendMessage(Text.literal("  No aspects present").formatted(Formatting.GRAY));
             } else {
-                for (Map.Entry<Identifier, Double> entry : density.getDensities().entrySet()) {
+                for (Map.Entry<Identifier, Double> entry : finalDensity.getDensities().entrySet()) {
                     Formatting color = entry.getKey().equals(VITIUM_ASPECT) ? Formatting.RED : Formatting.GREEN;
                     player.sendMessage(Text.literal(
                             String.format("  %s: %.2f", entry.getKey().toString(), entry.getValue())
@@ -134,29 +159,6 @@ public class AetherDensityCommand {
                 player.sendMessage(Text.literal("Status: PURE").formatted(Formatting.DARK_GREEN));
             }
 
-            if (modifications != null && !modifications.isEmpty()) {
-                player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
-                player.sendMessage(Text.literal("Dynamic Modifications:").formatted(Formatting.BLUE));
-
-                for (Map.Entry<Identifier, Double> entry : modifications.entrySet()) {
-                    String change = entry.getValue() >= 0 ? "+" : "";
-                    player.sendMessage(Text.literal(
-                            String.format("  %s: %s%.2f", entry.getKey().toString(), change, entry.getValue())
-                    ));
-                }
-            }
-
-            // Add structure information to report
-            if (structureDensity != AetherDensity.EMPTY) {
-                player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
-                player.sendMessage(Text.literal("Structure Density Override:").formatted(Formatting.LIGHT_PURPLE));
-                for (Map.Entry<Identifier, Double> entry : structureDensity.getDensities().entrySet()) {
-                    player.sendMessage(Text.literal(
-                            String.format("  %s: %.2f", entry.getKey().toString(), entry.getValue())
-                    ).formatted(Formatting.LIGHT_PURPLE));
-                }
-            }
-            
             if (BiomeAetherDensityManager.DENSITY_MAP.isEmpty()) {
                 player.sendMessage(Text.literal("---").formatted(Formatting.GRAY));
                 player.sendMessage(Text.literal("WARNING: No biome densities loaded from datapacks!").formatted(Formatting.DARK_RED));
@@ -183,12 +185,10 @@ public class AetherDensityCommand {
 
     private static boolean isInsideStructure(ServerWorld world, BlockPos pos, Identifier structureId) {
         try {
-            // Correct way to get structure entry in Minecraft 1.20.1
             Optional<RegistryEntry.Reference<Structure>> structureEntry = world.getRegistryManager()
                     .get(RegistryKeys.STRUCTURE)
                     .getEntry(RegistryKey.of(RegistryKeys.STRUCTURE, structureId));
 
-            // Use hasKeyAndValue() instead of isEmpty()
             if (structureEntry.isEmpty() || !structureEntry.get().hasKeyAndValue()) {
                 return false;
             }

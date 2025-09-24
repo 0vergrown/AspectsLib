@@ -29,44 +29,50 @@ public class AetherDensityManager {
         }
 
         AspectsLib.LOGGER.debug("Getting density for biome: {} at position {}", biomeId, pos);
-        AspectsLib.LOGGER.debug("Available biome densities: {}", BiomeAetherDensityManager.DENSITY_MAP.keySet());
 
-        // Start with biome density
-        AetherDensity density = biomeId != null ?
+        // Start with biome density as the base
+        AetherDensity baseDensity = biomeId != null ?
                 BiomeAetherDensityManager.DENSITY_MAP.getOrDefault(biomeId, AetherDensity.EMPTY) :
                 AetherDensity.EMPTY;
 
-        if (density == AetherDensity.EMPTY && biomeId != null) {
+        if (baseDensity == AetherDensity.EMPTY && biomeId != null) {
             AspectsLib.LOGGER.debug("No base density found for biome: {}", biomeId);
-        } else if (density != AetherDensity.EMPTY) {
-            AspectsLib.LOGGER.debug("Found base density for biome {}: {}", biomeId, density.getDensities());
+        } else if (baseDensity != AetherDensity.EMPTY) {
+            AspectsLib.LOGGER.debug("Found base density for biome {}: {}", biomeId, baseDensity.getDensities());
         }
 
-        // Apply structure densities as "pockets" - they override biome densities
+        // Create a copy of the base density that we can modify
+        Map<Identifier, Double> finalDensities = new HashMap<>(baseDensity.getDensities());
+
+        // Apply structure densities as ADDITIVE "pockets" - they add to biome aspects
         if (world instanceof ServerWorld serverWorld) {
             AetherDensity structureDensity = getStructureDensity(serverWorld, pos);
             if (structureDensity != AetherDensity.EMPTY) {
                 AspectsLib.LOGGER.debug("Found structure density at {}: {}", pos, structureDensity.getDensities());
-                // Structure densities create isolated pockets that override biome densities
-                density = structureDensity;
+
+                // Add structure aspects to the base biome aspects
+                for (Map.Entry<Identifier, Double> structureAspect : structureDensity.getDensities().entrySet()) {
+                    Identifier aspectId = structureAspect.getKey();
+                    double structureAmount = structureAspect.getValue();
+
+                    // Add structure aspect to existing biome aspect (or create new entry)
+                    finalDensities.merge(aspectId, structureAmount, Double::sum);
+                    AspectsLib.LOGGER.debug("Added {} RU of {} from structure to biome density", structureAmount, aspectId);
+                }
             }
         }
 
-        // Apply dynamic modifications (like corruption)
+        // Apply dynamic modifications (like corruption) to the combined density
         if (biomeId != null) {
             Map<Identifier, Double> dynamicMods = DynamicAetherDensityManager.getModifications(biomeId);
             if (dynamicMods != null && !dynamicMods.isEmpty()) {
-                Map<Identifier, Double> finalDensities = new HashMap<>(density.getDensities());
-
                 for (Map.Entry<Identifier, Double> entry : dynamicMods.entrySet()) {
                     finalDensities.merge(entry.getKey(), entry.getValue(), Double::sum);
                 }
-
-                density = new AetherDensity(finalDensities);
             }
         }
 
-        return density;
+        return new AetherDensity(finalDensities);
     }
 
     private static AetherDensity getStructureDensity(ServerWorld world, BlockPos pos) {
