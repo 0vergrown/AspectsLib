@@ -1,5 +1,6 @@
 package dev.overgrown.aspectslib.api.aether;
 
+import dev.overgrown.aspectslib.AspectsLib;
 import dev.overgrown.aspectslib.aether.AetherDensity;
 import net.minecraft.util.Identifier;
 
@@ -18,7 +19,7 @@ public class AetherDensityBuilder {
     }
 
     public AetherDensityBuilder add(String aspectName, double density) {
-        return add(new Identifier("aspectslib", aspectName), density);
+        return add(AspectsLib.identifier(aspectName), density);
     }
 
     public AetherDensity build() {

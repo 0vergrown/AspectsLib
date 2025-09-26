@@ -161,7 +161,7 @@ public class AetherDensityAPIImpl implements IAetherDensityAPI {
     }
 
     private void notifyDensityUpdateListeners(Identifier id) {
-        // This is a simplified notification - in practice you'd want more context
+        // This is a simplified notification (in practice, it needs more context) - which you won't get because I'm lazy... uwu
         for (IAetherDensityUpdateListener listener : updateListeners) {
             if (BiomeAetherDensityManager.DENSITY_MAP.containsKey(id)) {
                 listener.onBiomeDensityUpdate(id, getBiomeDensity(id));
@@ -173,8 +173,8 @@ public class AetherDensityAPIImpl implements IAetherDensityAPI {
 
     // Package-private method to get the modifications map for internal use
     static Map<Identifier, Map<Identifier, Double>> getModificationsMap() {
-        // We need to add this method to DynamicAetherDensityManager
-        // For now, we'll use reflection or add the method there
+        // Add this method to DynamicAetherDensityManager
+        // For now, it's reflection or add the method here (REMEMBER TO DO IT YOU LAZY BUM!!!)
         return Collections.emptyMap(); // Placeholder
     }
 }
