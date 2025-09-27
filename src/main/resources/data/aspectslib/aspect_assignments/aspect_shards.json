@@ -1,222 +1,222 @@
 [
   {
-    "item_tag": "aspectslib:aspects/primal/aer",
+    "item": "aspectslib:aer_aspect_shard",
     "aspects": {
       "aspectslib:aer": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/primal/aqua",
+    "item": "aspectslib:aqua_aspect_shard",
     "aspects": {
       "aspectslib:aqua": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/primal/ignis",
+    "item": "aspectslib:ignis_aspect_shard",
     "aspects": {
       "aspectslib:ignis": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/primal/ordo",
+    "item": "aspectslib:ordo_aspect_shard",
     "aspects": {
       "aspectslib:ordo": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/primal/perditio",
+    "item": "aspectslib:perditio_aspect_shard",
     "aspects": {
       "aspectslib:perditio": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/primal/terra",
+    "item": "aspectslib:terra_aspect_shard",
     "aspects": {
       "aspectslib:terra": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/gelum",
+    "item": "aspectslib:gelum_aspect_shard",
     "aspects": {
       "aspectslib:gelum": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/lux",
+    "item": "aspectslib:lux_aspect_shard",
     "aspects": {
       "aspectslib:lux": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/metallum",
+    "item": "aspectslib:metallum_aspect_shard",
     "aspects": {
       "aspectslib:metallum": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/mortuus",
+    "item": "aspectslib:mortuus_aspect_shard",
     "aspects": {
       "aspectslib:mortuus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/motus",
+    "item": "aspectslib:motus_aspect_shard",
     "aspects": {
       "aspectslib:motus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/permutatio",
+    "item": "aspectslib:permutatio_aspect_shard",
     "aspects": {
       "aspectslib:permutatio": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/potentia",
+    "item": "aspectslib:potentia_aspect_shard",
     "aspects": {
       "aspectslib:potentia": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/vacuos",
+    "item": "aspectslib:vacuos_aspect_shard",
     "aspects": {
       "aspectslib:vacuos": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/victus",
+    "item": "aspectslib:victus_aspect_shard",
     "aspects": {
       "aspectslib:victus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/secondary/vitreus",
+    "item": "aspectslib:vitreus_aspect_shard",
     "aspects": {
-      "aspectslib:vitreus": 20
+      "aspectslib:vitreus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/bestia",
+    "item": "aspectslib:bestia_aspect_shard",
     "aspects": {
       "aspectslib:bestia": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/exanimis",
+    "item": "aspectslib:exanimis_aspect_shard",
     "aspects": {
       "aspectslib:exanimis": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/herba",
+    "item": "aspectslib:herba_aspect_shard",
     "aspects": {
       "aspectslib:herba": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/instrumentum",
+    "item": "aspectslib:instrumentum_aspect_shard",
     "aspects": {
       "aspectslib:instrumentum": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/praecantatio",
+    "item": "aspectslib:praecantatio_aspect_shard",
     "aspects": {
-      "aspectslib:praecantatio": 10
+      "aspectslib:praecantatio": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/spiritus",
+    "item": "aspectslib:spiritus_aspect_shard",
     "aspects": {
       "aspectslib:spiritus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/tenebrae",
+    "item": "aspectslib:tenebrae_aspect_shard",
     "aspects": {
       "aspectslib:tenebrae": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/vinculum",
+    "item": "aspectslib:vinculum_aspect_shard",
     "aspects": {
       "aspectslib:vinculum": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/tertiary/volatus",
+    "item": "aspectslib:volatus_aspect_shard",
     "aspects": {
       "aspectslib:volatus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/alienis",
+    "item": "aspectslib:alienis_aspect_shard",
     "aspects": {
       "aspectslib:alienis": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/alkimia",
+    "item": "aspectslib:alkimia_aspect_shard",
     "aspects": {
       "aspectslib:alkimia": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/auram",
+    "item": "aspectslib:auram_aspect_shard",
     "aspects": {
-      "aspectslib:auram": 5
+      "aspectslib:auram": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/aversio",
+    "item": "aspectslib:aversio_aspect_shard",
     "aspects": {
       "aspectslib:aversio": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/cognitio",
+    "item": "aspectslib:cognitio_aspect_shard",
     "aspects": {
       "aspectslib:cognitio": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/desiderium",
+    "item": "aspectslib:desiderium_aspect_shard",
     "aspects": {
       "aspectslib:desiderium": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/fabrico",
+    "item": "aspectslib:fabrico_aspect_shard",
     "aspects": {
       "aspectslib:fabrico": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/humanus",
+    "item": "aspectslib:humanus_aspect_shard",
     "aspects": {
       "aspectslib:humanus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/machina",
+    "item": "aspectslib:machina_aspect_shard",
     "aspects": {
       "aspectslib:machina": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/praemunio",
+    "item": "aspectslib:praemunio_aspect_shard",
     "aspects": {
       "aspectslib:praemunio": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/sensus",
+    "item": "aspectslib:sensus_aspect_shard",
     "aspects": {
       "aspectslib:sensus": 1
     }
   },
   {
-    "item_tag": "aspectslib:aspects/quaternary/vitium",
+    "item": "aspectslib:vitium_aspect_shard",
     "aspects": {
       "aspectslib:vitium": 1
     }
