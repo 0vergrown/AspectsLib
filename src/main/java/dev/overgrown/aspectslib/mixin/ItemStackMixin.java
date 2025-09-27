@@ -3,6 +3,7 @@ package dev.overgrown.aspectslib.mixin;
 import dev.overgrown.aspectslib.api.IAspectDataProvider;
 import dev.overgrown.aspectslib.data.AspectData;
 import dev.overgrown.aspectslib.data.ItemAspectRegistry;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -89,33 +90,44 @@ public abstract class ItemStackMixin implements IAspectDataProvider {
         }
 
         // Build from registry defaults
-        AspectData aspectData = new AspectData(new Object2IntOpenHashMap<>());
+        Object2IntOpenHashMap<Identifier> combinedAspects = new Object2IntOpenHashMap<>();
         Identifier itemId = Registries.ITEM.getId(getItem());
-        ItemStack self = (ItemStack) (Object) this; // Use self for registry entry
+        ItemStack self = (ItemStack) (Object) this;
+        boolean hasDirectMatch = false;
 
-        // Direct item registration
-        if (ItemAspectRegistry.contains(itemId)) {
-            aspectData = aspectData.addAspect(ItemAspectRegistry.get(itemId));
-        }
-
-        // Tag-based registrations
+        // Check for direct item matches first
         for (Map.Entry<Identifier, AspectData> entry : ItemAspectRegistry.entries()) {
             Identifier id = entry.getKey();
             AspectData itemAspectData = entry.getValue();
 
-            // Exact match
             if (itemId.equals(id)) {
-                aspectData = aspectData.addAspect(itemAspectData);
-            }
-
-            // Tag match
-            TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), id);
-            if (self.getRegistryEntry().isIn(tagKey)) {
-                aspectData = aspectData.addAspect(itemAspectData);
+                // Add aspects from direct match
+                for (Object2IntMap.Entry<Identifier> aspectEntry : itemAspectData.getMap().object2IntEntrySet()) {
+                    combinedAspects.merge(aspectEntry.getKey(), aspectEntry.getIntValue(), Integer::sum);
+                }
+                hasDirectMatch = true;
             }
         }
 
-        aspectslib$cachedAspectData = aspectData.isEmpty() ? null : aspectData;
+        // Only check tags if no direct match found
+        if (!hasDirectMatch) {
+            for (Map.Entry<Identifier, AspectData> entry : ItemAspectRegistry.entries()) {
+                Identifier id = entry.getKey();
+                AspectData itemAspectData = entry.getValue();
+
+                if (!itemId.equals(id)) {
+                    TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), id);
+                    if (self.getRegistryEntry().isIn(tagKey)) {
+                        // Add aspects from tag match
+                        for (Object2IntMap.Entry<Identifier> aspectEntry : itemAspectData.getMap().object2IntEntrySet()) {
+                            combinedAspects.merge(aspectEntry.getKey(), aspectEntry.getIntValue(), Integer::sum);
+                        }
+                    }
+                }
+            }
+        }
+
+        aspectslib$cachedAspectData = combinedAspects.isEmpty() ? null : new AspectData(combinedAspects);
     }
 
     /** Reset cache when NBT changes */

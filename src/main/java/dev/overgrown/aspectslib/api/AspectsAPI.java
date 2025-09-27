@@ -3,11 +3,15 @@ package dev.overgrown.aspectslib.api;
 import dev.overgrown.aspectslib.data.*;
 import dev.overgrown.aspectslib.entity.aura_node.client.AuraNodeVisibilityConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -125,6 +129,92 @@ public class AspectsAPI {
         AspectData.Builder builder = new AspectData.Builder(AspectData.DEFAULT);
         builder.addByName(aspectName, amount);
         ItemAspectRegistry.register(itemId, builder.build());
+    }
+
+    /**
+     * Registers default aspects for a block
+     * @param block The block to register aspects for
+     * @param aspectId The identifier of the aspect
+     * @param amount The default amount
+     */
+    public static void registerBlockAspect(Block block, Identifier aspectId, int amount) {
+        Identifier blockId = Registries.BLOCK.getId(block);
+        Aspect aspect = ModRegistries.ASPECTS.get(aspectId);
+        
+        if (aspect != null) {
+            Object2IntOpenHashMap<Identifier> aspects = new Object2IntOpenHashMap<>();
+            aspects.put(aspectId, amount);
+            BlockAspectRegistry.register(blockId, new AspectData(aspects));
+        }
+    }
+
+    /**
+     * Registers default aspects for an entity type
+     * @param entityType The entity type to register aspects for
+     * @param aspectId The identifier of the aspect
+     * @param amount The default amount
+     */
+    public static void registerEntityAspect(EntityType<?> entityType, Identifier aspectId, int amount) {
+        Identifier entityId = Registries.ENTITY_TYPE.getId(entityType);
+        Aspect aspect = ModRegistries.ASPECTS.get(aspectId);
+        
+        if (aspect != null) {
+            Object2IntOpenHashMap<Identifier> aspects = new Object2IntOpenHashMap<>();
+            aspects.put(aspectId, amount);
+            EntityAspectRegistry.register(entityId, new AspectData(aspects));
+        }
+    }
+
+    /**
+     * Registers default aspects for a biome
+     * @param biomeKey The registry key of the biome to register aspects for
+     * @param aspectId The identifier of the aspect
+     * @param amount The default amount
+     */
+    public static void registerBiomeAspect(RegistryKey<Biome> biomeKey, Identifier aspectId, int amount) {
+        Aspect aspect = ModRegistries.ASPECTS.get(aspectId);
+        
+        if (aspect != null) {
+            Object2IntOpenHashMap<Identifier> aspects = new Object2IntOpenHashMap<>();
+            aspects.put(aspectId, amount);
+            BiomeAspectRegistry.register(biomeKey, new AspectData(aspects));
+        }
+    }
+
+    /**
+     * Gets aspect data for a block
+     * @param blockId The identifier of the block
+     * @return The aspect data, or AspectData.DEFAULT if none
+     */
+    public static AspectData getBlockAspectData(Identifier blockId) {
+        return BlockAspectRegistry.get(blockId);
+    }
+
+    /**
+     * Gets aspect data for an entity type
+     * @param entityId The identifier of the entity type
+     * @return The aspect data, or AspectData.DEFAULT if none
+     */
+    public static AspectData getEntityAspectData(Identifier entityId) {
+        return EntityAspectRegistry.get(entityId);
+    }
+
+    /**
+     * Gets aspect data for a biome
+     * @param biomeKey The registry key of the biome
+     * @return The aspect data, or AspectData.DEFAULT if none
+     */
+    public static AspectData getBiomeAspectData(RegistryKey<Biome> biomeKey) {
+        return BiomeAspectRegistry.get(biomeKey);
+    }
+
+    /**
+     * Gets aspect data for a biome by identifier
+     * @param biomeId The identifier of the biome
+     * @return The aspect data, or AspectData.DEFAULT if none
+     */
+    public static AspectData getBiomeAspectData(Identifier biomeId) {
+        return BiomeAspectRegistry.get(biomeId);
     }
 
     /**

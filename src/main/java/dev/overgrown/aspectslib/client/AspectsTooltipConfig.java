@@ -10,10 +10,9 @@ import java.util.function.BiPredicate;
 
 public class AspectsTooltipConfig {
     private static final List<BiPredicate<ItemStack, PlayerEntity>> visibilityConditions = new ArrayList<>();
-    private static boolean alwaysShow = false;
+    private static boolean alwaysShow = true;
 
     static {
-        // Default condition: never show unless conditions are added.
         visibilityConditions.add((stack, player) -> alwaysShow);
     }
 

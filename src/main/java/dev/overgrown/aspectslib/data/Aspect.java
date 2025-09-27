@@ -9,6 +9,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 /**
  * This is the Aspect class, which holds an instance of Aspect derived from files found in data/aspectslib/aspects/{json_file}.json
  * <p>
@@ -112,7 +114,13 @@ public record Aspect(String name, Identifier textureLocation) {
      * @return the identifier of the Aspect
      */
     private Identifier getIdentifier() {
-        return AspectManager.NAME_TO_ID.get(this.name);
+        // Find identifier by searching through the registry
+        for (Map.Entry<Identifier, Aspect> entry : ModRegistries.ASPECTS.entrySet()) {
+            if (entry.getValue() == this) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     /**

@@ -52,11 +52,6 @@ public class ItemAspectRegistry {
      * @return The registered `AspectData`.
      */
     public static AspectData register(Identifier id, AspectData aspect) {
-        if(idToAspect.containsKey(id)) {
-            AspectData existing = idToAspect.get(id);
-            existing.addAspect(aspect);
-            return aspect;
-        }
         idToAspect.put(id, aspect);
         return aspect;
     }
