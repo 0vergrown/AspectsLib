@@ -1,0 +1,714 @@
+[
+  {
+    "item_tag": "minecraft:logs",
+    "aspects": {
+      "aspectslib:herba": 6,
+      "aspectslib:terra": 4
+    }
+  },
+  {
+    "item_tag": "minecraft:planks",
+    "aspects": {
+      "aspectslib:herba": 4,
+      "aspectslib:terra": 2,
+      "aspectslib:fabrico": 1
+    }
+  },
+  {
+    "item_tag": "minecraft:leaves",
+    "aspects": {
+      "aspectslib:herba": 3,
+      "aspectslib:aer": 2,
+      "aspectslib:victus": 1
+    }
+  },
+  {
+    "item_tag": "minecraft:saplings",
+    "aspects": {
+      "aspectslib:herba": 3,
+      "aspectslib:victus": 2,
+      "aspectslib:terra": 1
+    }
+  },
+  {
+    "item_tag": "minecraft:flowers",
+    "aspects": {
+      "aspectslib:herba": 2,
+      "aspectslib:sensus": 1,
+      "aspectslib:victus": 1
+    }
+  },
+  {
+    "item_tag": "minecraft:wool",
+    "aspects": {
+      "aspectslib:bestia": 3,
+      "aspectslib:fabrico": 2
+    }
+  },
+  {
+    "item_tag": "minecraft:stone_tool_materials",
+    "aspects": {
+      "aspectslib:terra": 3,
+      "aspectslib:instrumentum": 2
+    }
+  },
+  {
+    "item_tag": "minecraft:wooden_tools",
+    "aspects": {
+      "aspectslib:herba": 3,
+      "aspectslib:instrumentum": 3
+    }
+  },
+  {
+    "item_tag": "minecraft:stone_tools",
+    "aspects": {
+      "aspectslib:terra": 4,
+      "aspectslib:instrumentum": 4
+    }
+  },
+  {
+    "item_tag": "minecraft:iron_tools",
+    "aspects": {
+      "aspectslib:metallum": 5,
+      "aspectslib:instrumentum": 5
+    }
+  },
+  {
+    "item_tag": "minecraft:golden_tools",
+    "aspects": {
+      "aspectslib:metallum": 6,
+      "aspectslib:desiderium": 3,
+      "aspectslib:instrumentum": 4
+    }
+  },
+  {
+    "item_tag": "minecraft:diamond_tools",
+    "aspects": {
+      "aspectslib:vitreus": 8,
+      "aspectslib:desiderium": 5,
+      "aspectslib:instrumentum": 6
+    }
+  },
+  {
+    "item_tag": "minecraft:netherite_tools",
+    "aspects": {
+      "aspectslib:metallum": 10,
+      "aspectslib:ignis": 5,
+      "aspectslib:praemunio": 8,
+      "aspectslib:instrumentum": 8
+    }
+  },
+  {
+    "item_tag": "minecraft:leather_armor",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:praemunio": 3
+    }
+  },
+  {
+    "item_tag": "minecraft:chainmail_armor",
+    "aspects": {
+      "aspectslib:metallum": 4,
+      "aspectslib:praemunio": 4,
+      "aspectslib:vinculum": 2
+    }
+  },
+  {
+    "item_tag": "minecraft:iron_armor",
+    "aspects": {
+      "aspectslib:metallum": 6,
+      "aspectslib:praemunio": 5
+    }
+  },
+  {
+    "item_tag": "minecraft:golden_armor",
+    "aspects": {
+      "aspectslib:metallum": 6,
+      "aspectslib:desiderium": 4,
+      "aspectslib:praemunio": 4
+    }
+  },
+  {
+    "item_tag": "minecraft:diamond_armor",
+    "aspects": {
+      "aspectslib:vitreus": 10,
+      "aspectslib:desiderium": 6,
+      "aspectslib:praemunio": 7
+    }
+  },
+  {
+    "item_tag": "minecraft:netherite_armor",
+    "aspects": {
+      "aspectslib:metallum": 12,
+      "aspectslib:ignis": 6,
+      "aspectslib:praemunio": 10
+    }
+  },
+  {
+    "item_tag": "c:ores/iron",
+    "aspects": {
+      "aspectslib:metallum": 4,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "item_tag": "c:ores/gold",
+    "aspects": {
+      "aspectslib:metallum": 5,
+      "aspectslib:desiderium": 3,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "item_tag": "c:ores/diamond",
+    "aspects": {
+      "aspectslib:vitreus": 8,
+      "aspectslib:desiderium": 6,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "item_tag": "c:ores/emerald",
+    "aspects": {
+      "aspectslib:vitreus": 6,
+      "aspectslib:desiderium": 8,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "item_tag": "c:ores/coal",
+    "aspects": {
+      "aspectslib:potentia": 4,
+      "aspectslib:ignis": 2,
+      "aspectslib:terra": 1
+    }
+  },
+  {
+    "item_tag": "c:ores/copper",
+    "aspects": {
+      "aspectslib:metallum": 3,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "item_tag": "c:ores/lapis",
+    "aspects": {
+      "aspectslib:sensus": 4,
+      "aspectslib:praecantatio": 3,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "item_tag": "c:ores/redstone",
+    "aspects": {
+      "aspectslib:potentia": 6,
+      "aspectslib:machina": 4,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "item_tag": "c:ingots/iron",
+    "aspects": {
+      "aspectslib:metallum": 6,
+      "aspectslib:ordo": 3
+    }
+  },
+  {
+    "item_tag": "c:ingots/gold",
+    "aspects": {
+      "aspectslib:metallum": 7,
+      "aspectslib:desiderium": 4,
+      "aspectslib:ordo": 3
+    }
+  },
+  {
+    "item_tag": "c:ingots/copper",
+    "aspects": {
+      "aspectslib:metallum": 5,
+      "aspectslib:ordo": 2
+    }
+  },
+  {
+    "item_tag": "c:ingots/netherite",
+    "aspects": {
+      "aspectslib:metallum": 12,
+      "aspectslib:ignis": 6,
+      "aspectslib:praemunio": 8,
+      "aspectslib:ordo": 4
+    }
+  },
+  {
+    "item": "minecraft:water_bucket",
+    "aspects": {
+      "aspectslib:aqua": 10,
+      "aspectslib:metallum": 3
+    }
+  },
+  {
+    "item": "minecraft:lava_bucket",
+    "aspects": {
+      "aspectslib:ignis": 10,
+      "aspectslib:terra": 2,
+      "aspectslib:metallum": 3
+    }
+  },
+  {
+    "item": "minecraft:milk_bucket",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:victus": 3,
+      "aspectslib:metallum": 3
+    }
+  },
+  {
+    "item": "minecraft:bread",
+    "aspects": {
+      "aspectslib:herba": 3,
+      "aspectslib:victus": 4,
+      "aspectslib:fames": 3
+    }
+  },
+  {
+    "item": "minecraft:cooked_beef",
+    "aspects": {
+      "aspectslib:bestia": 5,
+      "aspectslib:victus": 4,
+      "aspectslib:fames": 5,
+      "aspectslib:ignis": 1
+    }
+  },
+  {
+    "item": "minecraft:cooked_porkchop",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:victus": 4,
+      "aspectslib:fames": 5,
+      "aspectslib:ignis": 1
+    }
+  },
+  {
+    "item": "minecraft:apple",
+    "aspects": {
+      "aspectslib:herba": 2,
+      "aspectslib:victus": 2,
+      "aspectslib:fames": 2
+    }
+  },
+  {
+    "item": "minecraft:golden_apple",
+    "aspects": {
+      "aspectslib:herba": 2,
+      "aspectslib:victus": 6,
+      "aspectslib:fames": 4,
+      "aspectslib:metallum": 8,
+      "aspectslib:desiderium": 6,
+      "aspectslib:praecantatio": 4
+    }
+  },
+  {
+    "item": "minecraft:enchanted_golden_apple",
+    "aspects": {
+      "aspectslib:herba": 2,
+      "aspectslib:victus": 10,
+      "aspectslib:fames": 6,
+      "aspectslib:metallum": 16,
+      "aspectslib:desiderium": 12,
+      "aspectslib:praecantatio": 12,
+      "aspectslib:auram": 8
+    }
+  },
+  {
+    "item": "minecraft:ender_pearl",
+    "aspects": {
+      "aspectslib:alienis": 6,
+      "aspectslib:motus": 4,
+      "aspectslib:tenebrae": 2
+    }
+  },
+  {
+    "item": "minecraft:ender_eye",
+    "aspects": {
+      "aspectslib:alienis": 8,
+      "aspectslib:motus": 5,
+      "aspectslib:sensus": 4,
+      "aspectslib:ignis": 2
+    }
+  },
+  {
+    "item": "minecraft:blaze_rod",
+    "aspects": {
+      "aspectslib:ignis": 8,
+      "aspectslib:potentia": 4,
+      "aspectslib:praecantatio": 2
+    }
+  },
+  {
+    "item": "minecraft:ghast_tear",
+    "aspects": {
+      "aspectslib:spiritus": 6,
+      "aspectslib:aqua": 4,
+      "aspectslib:alienis": 3
+    }
+  },
+  {
+    "item": "minecraft:nether_star",
+    "aspects": {
+      "aspectslib:auram": 20,
+      "aspectslib:spiritus": 16,
+      "aspectslib:potentia": 12,
+      "aspectslib:alienis": 10,
+      "aspectslib:mortuus": 8
+    }
+  },
+  {
+    "item": "minecraft:heart_of_the_sea",
+    "aspects": {
+      "aspectslib:aqua": 15,
+      "aspectslib:auram": 10,
+      "aspectslib:desiderium": 8,
+      "aspectslib:praecantatio": 6
+    }
+  },
+  {
+    "item": "minecraft:bone",
+    "aspects": {
+      "aspectslib:mortuus": 4,
+      "aspectslib:exanimis": 2
+    }
+  },
+  {
+    "item": "minecraft:rotten_flesh",
+    "aspects": {
+      "aspectslib:mortuus": 3,
+      "aspectslib:bestia": 2,
+      "aspectslib:vitium": 2
+    }
+  },
+  {
+    "item": "minecraft:spider_eye",
+    "aspects": {
+      "aspectslib:sensus": 3,
+      "aspectslib:bestia": 2,
+      "aspectslib:vitium": 1
+    }
+  },
+  {
+    "item": "minecraft:gunpowder",
+    "aspects": {
+      "aspectslib:potentia": 5,
+      "aspectslib:ignis": 3,
+      "aspectslib:perditio": 2
+    }
+  },
+  {
+    "item": "minecraft:glass",
+    "aspects": {
+      "aspectslib:vitreus": 3,
+      "aspectslib:ordo": 1
+    }
+  },
+  {
+    "item": "minecraft:obsidian",
+    "aspects": {
+      "aspectslib:terra": 8,
+      "aspectslib:ignis": 4,
+      "aspectslib:tenebrae": 3
+    }
+  },
+  {
+    "item": "minecraft:crying_obsidian",
+    "aspects": {
+      "aspectslib:terra": 8,
+      "aspectslib:ignis": 4,
+      "aspectslib:tenebrae": 3,
+      "aspectslib:spiritus": 5
+    }
+  },
+  {
+    "item": "minecraft:tnt",
+    "aspects": {
+      "aspectslib:potentia": 10,
+      "aspectslib:ignis": 6,
+      "aspectslib:perditio": 8
+    }
+  },
+  {
+    "item": "minecraft:ice",
+    "aspects": {
+      "aspectslib:gelum": 5,
+      "aspectslib:aqua": 3
+    }
+  },
+  {
+    "item": "minecraft:packed_ice",
+    "aspects": {
+      "aspectslib:gelum": 7,
+      "aspectslib:aqua": 4,
+      "aspectslib:ordo": 2
+    }
+  },
+  {
+    "item": "minecraft:blue_ice",
+    "aspects": {
+      "aspectslib:gelum": 9,
+      "aspectslib:aqua": 5,
+      "aspectslib:ordo": 3
+    }
+  },
+  {
+    "item": "minecraft:snow_block",
+    "aspects": {
+      "aspectslib:gelum": 4,
+      "aspectslib:aqua": 2,
+      "aspectslib:aer": 1
+    }
+  },
+  {
+    "item": "minecraft:prismarine",
+    "aspects": {
+      "aspectslib:aqua": 4,
+      "aspectslib:terra": 3,
+      "aspectslib:sensus": 2
+    }
+  },
+  {
+    "item": "minecraft:sea_lantern",
+    "aspects": {
+      "aspectslib:lux": 8,
+      "aspectslib:aqua": 4,
+      "aspectslib:sensus": 3
+    }
+  },
+  {
+    "item": "minecraft:glowstone",
+    "aspects": {
+      "aspectslib:lux": 8,
+      "aspectslib:sensus": 4,
+      "aspectslib:aer": 2
+    }
+  },
+  {
+    "item": "minecraft:beacon",
+    "aspects": {
+      "aspectslib:lux": 25,
+      "aspectslib:auram": 20,
+      "aspectslib:praecantatio": 15,
+      "aspectslib:vitreus": 8,
+      "aspectslib:spiritus": 20
+    }
+  },
+  {
+    "item": "minecraft:conduit",
+    "aspects": {
+      "aspectslib:aqua": 18,
+      "aspectslib:auram": 15,
+      "aspectslib:praecantatio": 10,
+      "aspectslib:sensus": 8
+    }
+  },
+  {
+    "item": "minecraft:dirt",
+    "aspects": {
+      "aspectslib:terra": 3,
+      "aspectslib:herba": 1
+    }
+  },
+  {
+    "item": "minecraft:sand",
+    "aspects": {
+      "aspectslib:terra": 2,
+      "aspectslib:perditio": 1
+    }
+  },
+  {
+    "item": "minecraft:gravel",
+    "aspects": {
+      "aspectslib:terra": 2,
+      "aspectslib:perditio": 2
+    }
+  },
+  {
+    "item": "minecraft:clay",
+    "aspects": {
+      "aspectslib:terra": 3,
+      "aspectslib:aqua": 2
+    }
+  },
+  {
+    "item": "minecraft:netherrack",
+    "aspects": {
+      "aspectslib:terra": 2,
+      "aspectslib:ignis": 3,
+      "aspectslib:perditio": 1
+    }
+  },
+  {
+    "item": "minecraft:soul_sand",
+    "aspects": {
+      "aspectslib:terra": 2,
+      "aspectslib:spiritus": 4,
+      "aspectslib:mortuus": 2
+    }
+  },
+  {
+    "item": "minecraft:soul_soil",
+    "aspects": {
+      "aspectslib:terra": 3,
+      "aspectslib:spiritus": 3,
+      "aspectslib:mortuus": 1
+    }
+  },
+  {
+    "item": "minecraft:end_stone",
+    "aspects": {
+      "aspectslib:terra": 4,
+      "aspectslib:alienis": 3,
+      "aspectslib:tenebrae": 1
+    }
+  },
+  {
+    "item": "minecraft:magma_block",
+    "aspects": {
+      "aspectslib:ignis": 6,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "item": "minecraft:dragon_egg",
+    "aspects": {
+      "aspectslib:alienis": 40,
+      "aspectslib:potentia": 35,
+      "aspectslib:auram": 30,
+      "aspectslib:bestia": 20,
+      "aspectslib:volatus": 15
+    }
+  },
+  {
+    "item": "minecraft:enchanting_table",
+    "aspects": {
+      "aspectslib:praecantatio": 15,
+      "aspectslib:cognitio": 10,
+      "aspectslib:auram": 8,
+      "aspectslib:alienis": 5
+    }
+  },
+  {
+    "item": "minecraft:anvil",
+    "aspects": {
+      "aspectslib:metallum": 12,
+      "aspectslib:fabrico": 8,
+      "aspectslib:instrumentum": 6
+    }
+  },
+  {
+    "item": "minecraft:furnace",
+    "aspects": {
+      "aspectslib:ignis": 4,
+      "aspectslib:terra": 6,
+      "aspectslib:fabrico": 3
+    }
+  },
+  {
+    "item": "minecraft:brewing_stand",
+    "aspects": {
+      "aspectslib:alkimia": 10,
+      "aspectslib:praecantatio": 6,
+      "aspectslib:ignis": 4
+    }
+  },
+  {
+    "item": "minecraft:cauldron",
+    "aspects": {
+      "aspectslib:alkimia": 6,
+      "aspectslib:metallum": 8,
+      "aspectslib:vacuos": 4
+    }
+  },
+  {
+    "item": "minecraft:bookshelf",
+    "aspects": {
+      "aspectslib:cognitio": 8,
+      "aspectslib:herba": 6,
+      "aspectslib:fabrico": 3
+    }
+  },
+  {
+    "block": "minecraft:grass_block",
+    "aspects": {
+      "aspectslib:terra": 3,
+      "aspectslib:herba": 2,
+      "aspectslib:victus": 1
+    }
+  },
+  {
+    "block": "minecraft:water",
+    "aspects": {
+      "aspectslib:aqua": 5
+    }
+  },
+  {
+    "block": "minecraft:lava",
+    "aspects": {
+      "aspectslib:ignis": 8,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "block": "minecraft:fire",
+    "aspects": {
+      "aspectslib:ignis": 6,
+      "aspectslib:potentia": 2
+    }
+  },
+  {
+    "block": "minecraft:soul_fire",
+    "aspects": {
+      "aspectslib:ignis": 6,
+      "aspectslib:spiritus": 4,
+      "aspectslib:tenebrae": 2
+    }
+  },
+  {
+    "block": "minecraft:bedrock",
+    "aspects": {
+      "aspectslib:terra": 20,
+      "aspectslib:ordo": 15,
+      "aspectslib:praemunio": 10
+    }
+  },
+  {
+    "block": "minecraft:spawner",
+    "aspects": {
+      "aspectslib:spiritus": 10,
+      "aspectslib:bestia": 8,
+      "aspectslib:tenebrae": 6,
+      "aspectslib:vinculum": 4
+    }
+  },
+  {
+    "block": "minecraft:powder_snow",
+    "aspects": {
+      "aspectslib:gelum": 3,
+      "aspectslib:aqua": 1,
+      "aspectslib:aer": 2
+    }
+  },
+  {
+    "block": "minecraft:end_portal",
+    "aspects": {
+      "aspectslib:alienis": 50,
+      "aspectslib:motus": 30,
+      "aspectslib:tenebrae": 20,
+      "aspectslib:vacuos": 15
+    }
+  },
+  {
+    "block": "minecraft:nether_portal",
+    "aspects": {
+      "aspectslib:motus": 20,
+      "aspectslib:ignis": 15,
+      "aspectslib:alienis": 10,
+      "aspectslib:perditio": 5
+    }
+  }
+]

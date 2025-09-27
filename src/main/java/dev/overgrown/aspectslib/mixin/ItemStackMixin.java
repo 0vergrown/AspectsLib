@@ -91,27 +91,30 @@ public abstract class ItemStackMixin implements IAspectDataProvider {
         // Build from registry defaults
         AspectData aspectData = new AspectData(new Object2IntOpenHashMap<>());
         Identifier itemId = Registries.ITEM.getId(getItem());
-        ItemStack self = (ItemStack) (Object) this; // Use self for registry entry
+        ItemStack self = (ItemStack) (Object) this;
+        boolean hasDirectMatch = false;
 
-        // Direct item registration
-        if (ItemAspectRegistry.contains(itemId)) {
-            aspectData = aspectData.addAspect(ItemAspectRegistry.get(itemId));
-        }
-
-        // Tag-based registrations
         for (Map.Entry<Identifier, AspectData> entry : ItemAspectRegistry.entries()) {
             Identifier id = entry.getKey();
             AspectData itemAspectData = entry.getValue();
 
-            // Exact match
             if (itemId.equals(id)) {
                 aspectData = aspectData.addAspect(itemAspectData);
+                hasDirectMatch = true;
             }
+        }
 
-            // Tag match
-            TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), id);
-            if (self.getRegistryEntry().isIn(tagKey)) {
-                aspectData = aspectData.addAspect(itemAspectData);
+        if (!hasDirectMatch) {
+            for (Map.Entry<Identifier, AspectData> entry : ItemAspectRegistry.entries()) {
+                Identifier id = entry.getKey();
+                AspectData itemAspectData = entry.getValue();
+
+                if (!itemId.equals(id)) {
+                    TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), id);
+                    if (self.getRegistryEntry().isIn(tagKey)) {
+                        aspectData = aspectData.addAspect(itemAspectData);
+                    }
+                }
             }
         }
 

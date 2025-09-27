@@ -1,0 +1,556 @@
+[
+  {
+    "entity": "minecraft:pig",
+    "aspects": {
+      "aspectslib:bestia": 5,
+      "aspectslib:terra": 2,
+      "aspectslib:fames": 3
+    }
+  },
+  {
+    "entity": "minecraft:cow",
+    "aspects": {
+      "aspectslib:bestia": 6,
+      "aspectslib:terra": 3,
+      "aspectslib:fames": 4
+    }
+  },
+  {
+    "entity": "minecraft:sheep",
+    "aspects": {
+      "aspectslib:bestia": 5,
+      "aspectslib:terra": 2,
+      "aspectslib:fabrico": 3
+    }
+  },
+  {
+    "entity": "minecraft:chicken",
+    "aspects": {
+      "aspectslib:bestia": 3,
+      "aspectslib:aer": 2,
+      "aspectslib:volatus": 2
+    }
+  },
+  {
+    "entity": "minecraft:horse",
+    "aspects": {
+      "aspectslib:bestia": 8,
+      "aspectslib:motus": 6,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "entity": "minecraft:donkey",
+    "aspects": {
+      "aspectslib:bestia": 7,
+      "aspectslib:motus": 4,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "entity": "minecraft:mule",
+    "aspects": {
+      "aspectslib:bestia": 7,
+      "aspectslib:motus": 5,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "entity": "minecraft:llama",
+    "aspects": {
+      "aspectslib:bestia": 6,
+      "aspectslib:terra": 3,
+      "aspectslib:fabrico": 2
+    }
+  },
+  {
+    "entity": "minecraft:wolf",
+    "aspects": {
+      "aspectslib:bestia": 5,
+      "aspectslib:terra": 2,
+      "aspectslib:ira": 3
+    }
+  },
+  {
+    "entity": "minecraft:cat",
+    "aspects": {
+      "aspectslib:bestia": 3,
+      "aspectslib:sensus": 3,
+      "aspectslib:motus": 2
+    }
+  },
+  {
+    "entity": "minecraft:ocelot",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:sensus": 4,
+      "aspectslib:motus": 3
+    }
+  },
+  {
+    "entity": "minecraft:rabbit",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:motus": 4,
+      "aspectslib:terra": 1
+    }
+  },
+  {
+    "entity": "minecraft:fox",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:sensus": 4,
+      "aspectslib:motus": 3
+    }
+  },
+  {
+    "entity": "minecraft:bat",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:volatus": 3,
+      "aspectslib:tenebrae": 2
+    }
+  },
+  {
+    "entity": "minecraft:parrot",
+    "aspects": {
+      "aspectslib:bestia": 3,
+      "aspectslib:volatus": 4,
+      "aspectslib:aer": 3,
+      "aspectslib:sensus": 2
+    }
+  },
+  {
+    "entity": "minecraft:bee",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:volatus": 3,
+      "aspectslib:herba": 2,
+      "aspectslib:fames": 1
+    }
+  },
+  {
+    "entity": "minecraft:squid",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:aqua": 6,
+      "aspectslib:tenebrae": 2
+    }
+  },
+  {
+    "entity": "minecraft:glow_squid",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:aqua": 6,
+      "aspectslib:lux": 4,
+      "aspectslib:sensus": 3
+    }
+  },
+  {
+    "entity": "minecraft:dolphin",
+    "aspects": {
+      "aspectslib:bestia": 6,
+      "aspectslib:aqua": 8,
+      "aspectslib:sensus": 5,
+      "aspectslib:motus": 4
+    }
+  },
+  {
+    "entity": "minecraft:cod",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:aqua": 4,
+      "aspectslib:fames": 2
+    }
+  },
+  {
+    "entity": "minecraft:salmon",
+    "aspects": {
+      "aspectslib:bestia": 3,
+      "aspectslib:aqua": 4,
+      "aspectslib:fames": 3,
+      "aspectslib:motus": 1
+    }
+  },
+  {
+    "entity": "minecraft:tropical_fish",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:aqua": 3,
+      "aspectslib:sensus": 2
+    }
+  },
+  {
+    "entity": "minecraft:pufferfish",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:aqua": 3,
+      "aspectslib:aversio": 4,
+      "aspectslib:vitium": 2
+    }
+  },
+  {
+    "entity": "minecraft:turtle",
+    "aspects": {
+      "aspectslib:bestia": 5,
+      "aspectslib:aqua": 4,
+      "aspectslib:praemunio": 6,
+      "aspectslib:terra": 3
+    }
+  },
+  {
+    "entity": "minecraft:polar_bear",
+    "aspects": {
+      "aspectslib:bestia": 8,
+      "aspectslib:gelum": 6,
+      "aspectslib:terra": 4,
+      "aspectslib:ira": 3
+    }
+  },
+  {
+    "entity": "minecraft:panda",
+    "aspects": {
+      "aspectslib:bestia": 7,
+      "aspectslib:terra": 4,
+      "aspectslib:herba": 3
+    }
+  },
+  {
+    "entity": "minecraft:villager",
+    "aspects": {
+      "aspectslib:humanus": 8,
+      "aspectslib:cognitio": 6,
+      "aspectslib:fabrico": 4,
+      "aspectslib:ordo": 3
+    }
+  },
+  {
+    "entity": "minecraft:iron_golem",
+    "aspects": {
+      "aspectslib:metallum": 12,
+      "aspectslib:humanus": 6,
+      "aspectslib:praemunio": 8,
+      "aspectslib:fabrico": 4
+    }
+  },
+  {
+    "entity": "minecraft:snow_golem",
+    "aspects": {
+      "aspectslib:gelum": 8,
+      "aspectslib:humanus": 4,
+      "aspectslib:fabrico": 3,
+      "aspectslib:aer": 2
+    }
+  },
+  {
+    "entity": "minecraft:zombie",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:humanus": 4,
+      "aspectslib:tenebrae": 3,
+      "aspectslib:vitium": 2
+    }
+  },
+  {
+    "entity": "minecraft:zombie_villager",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:humanus": 6,
+      "aspectslib:tenebrae": 3,
+      "aspectslib:vitium": 3
+    }
+  },
+  {
+    "entity": "minecraft:drowned",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:humanus": 4,
+      "aspectslib:aqua": 4,
+      "aspectslib:tenebrae": 3
+    }
+  },
+  {
+    "entity": "minecraft:husk",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:humanus": 4,
+      "aspectslib:perditio": 3,
+      "aspectslib:tenebrae": 3
+    }
+  },
+  {
+    "entity": "minecraft:skeleton",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:exanimis": 4,
+      "aspectslib:tenebrae": 3,
+      "aspectslib:instrumentum": 2
+    }
+  },
+  {
+    "entity": "minecraft:stray",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:exanimis": 4,
+      "aspectslib:gelum": 4,
+      "aspectslib:tenebrae": 3
+    }
+  },
+  {
+    "entity": "minecraft:wither_skeleton",
+    "aspects": {
+      "aspectslib:mortuus": 8,
+      "aspectslib:exanimis": 6,
+      "aspectslib:tenebrae": 6,
+      "aspectslib:ignis": 4
+    }
+  },
+  {
+    "entity": "minecraft:spider",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:sensus": 4,
+      "aspectslib:tenebrae": 3,
+      "aspectslib:vinculum": 2
+    }
+  },
+  {
+    "entity": "minecraft:cave_spider",
+    "aspects": {
+      "aspectslib:bestia": 3,
+      "aspectslib:sensus": 4,
+      "aspectslib:tenebrae": 4,
+      "aspectslib:vitium": 3
+    }
+  },
+  {
+    "entity": "minecraft:creeper",
+    "aspects": {
+      "aspectslib:perditio": 8,
+      "aspectslib:potentia": 6,
+      "aspectslib:ignis": 4,
+      "aspectslib:herba": 2
+    }
+  },
+  {
+    "entity": "minecraft:enderman",
+    "aspects": {
+      "aspectslib:alienis": 10,
+      "aspectslib:tenebrae": 8,
+      "aspectslib:motus": 6,
+      "aspectslib:sensus": 4
+    }
+  },
+  {
+    "entity": "minecraft:endermite",
+    "aspects": {
+      "aspectslib:alienis": 4,
+      "aspectslib:tenebrae": 3,
+      "aspectslib:bestia": 2,
+      "aspectslib:motus": 2
+    }
+  },
+  {
+    "entity": "minecraft:silverfish",
+    "aspects": {
+      "aspectslib:bestia": 2,
+      "aspectslib:terra": 3,
+      "aspectslib:perditio": 2,
+      "aspectslib:motus": 2
+    }
+  },
+  {
+    "entity": "minecraft:witch",
+    "aspects": {
+      "aspectslib:humanus": 6,
+      "aspectslib:praecantatio": 8,
+      "aspectslib:alkimia": 6,
+      "aspectslib:cognitio": 4
+    }
+  },
+  {
+    "entity": "minecraft:slime",
+    "aspects": {
+      "aspectslib:aqua": 4,
+      "aspectslib:motus": 4,
+      "aspectslib:victus": 3,
+      "aspectslib:limus": 3
+    }
+  },
+  {
+    "entity": "minecraft:magma_cube",
+    "aspects": {
+      "aspectslib:ignis": 6,
+      "aspectslib:terra": 4,
+      "aspectslib:motus": 4,
+      "aspectslib:potentia": 3
+    }
+  },
+  {
+    "entity": "minecraft:phantom",
+    "aspects": {
+      "aspectslib:spiritus": 6,
+      "aspectslib:volatus": 6,
+      "aspectslib:tenebrae": 4,
+      "aspectslib:aer": 3
+    }
+  },
+  {
+    "entity": "minecraft:guardian",
+    "aspects": {
+      "aspectslib:aqua": 8,
+      "aspectslib:bestia": 6,
+      "aspectslib:sensus": 6,
+      "aspectslib:praemunio": 4
+    }
+  },
+  {
+    "entity": "minecraft:elder_guardian",
+    "aspects": {
+      "aspectslib:aqua": 12,
+      "aspectslib:bestia": 10,
+      "aspectslib:sensus": 8,
+      "aspectslib:praemunio": 8,
+      "aspectslib:cognitio": 6
+    }
+  },
+  {
+    "entity": "minecraft:shulker",
+    "aspects": {
+      "aspectslib:alienis": 8,
+      "aspectslib:praemunio": 6,
+      "aspectslib:motus": 4,
+      "aspectslib:aer": 3
+    }
+  },
+  {
+    "entity": "minecraft:ghast",
+    "aspects": {
+      "aspectslib:spiritus": 8,
+      "aspectslib:ignis": 6,
+      "aspectslib:volatus": 6,
+      "aspectslib:tenebrae": 4
+    }
+  },
+  {
+    "entity": "minecraft:blaze",
+    "aspects": {
+      "aspectslib:ignis": 10,
+      "aspectslib:volatus": 6,
+      "aspectslib:potentia": 4,
+      "aspectslib:praecantatio": 3
+    }
+  },
+  {
+    "entity": "minecraft:wither",
+    "aspects": {
+      "aspectslib:mortuus": 20,
+      "aspectslib:spiritus": 16,
+      "aspectslib:tenebrae": 12,
+      "aspectslib:perditio": 10,
+      "aspectslib:volatus": 8
+    }
+  },
+  {
+    "entity": "minecraft:ender_dragon",
+    "aspects": {
+      "aspectslib:alienis": 50,
+      "aspectslib:volatus": 30,
+      "aspectslib:potentia": 25,
+      "aspectslib:auram": 20,
+      "aspectslib:bestia": 18
+    }
+  },
+  {
+    "entity": "minecraft:piglin",
+    "aspects": {
+      "aspectslib:humanus": 6,
+      "aspectslib:ignis": 4,
+      "aspectslib:desiderium": 6,
+      "aspectslib:metallum": 3
+    }
+  },
+  {
+    "entity": "minecraft:piglin_brute",
+    "aspects": {
+      "aspectslib:humanus": 7,
+      "aspectslib:ignis": 5,
+      "aspectslib:ira": 8,
+      "aspectslib:metallum": 4
+    }
+  },
+  {
+    "entity": "minecraft:zombified_piglin",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:humanus": 5,
+      "aspectslib:ignis": 4,
+      "aspectslib:metallum": 3
+    }
+  },
+  {
+    "entity": "minecraft:hoglin",
+    "aspects": {
+      "aspectslib:bestia": 8,
+      "aspectslib:ignis": 4,
+      "aspectslib:ira": 6,
+      "aspectslib:fames": 4
+    }
+  },
+  {
+    "entity": "minecraft:zoglin",
+    "aspects": {
+      "aspectslib:mortuus": 6,
+      "aspectslib:bestia": 6,
+      "aspectslib:ira": 8,
+      "aspectslib:tenebrae": 4
+    }
+  },
+  {
+    "entity": "minecraft:strider",
+    "aspects": {
+      "aspectslib:bestia": 6,
+      "aspectslib:ignis": 8,
+      "aspectslib:motus": 4,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "entity": "minecraft:axolotl",
+    "aspects": {
+      "aspectslib:bestia": 4,
+      "aspectslib:aqua": 6,
+      "aspectslib:victus": 4,
+      "aspectslib:sensus": 3
+    }
+  },
+  {
+    "entity": "minecraft:goat",
+    "aspects": {
+      "aspectslib:bestia": 5,
+      "aspectslib:terra": 3,
+      "aspectslib:motus": 4,
+      "aspectslib:ira": 2
+    }
+  },
+  {
+    "entity": "minecraft:warden",
+    "aspects": {
+      "aspectslib:tenebrae": 15,
+      "aspectslib:sensus": 12,
+      "aspectslib:terra": 10,
+      "aspectslib:ira": 8,
+      "aspectslib:exanimis": 6
+    }
+  },
+  {
+    "entity": "minecraft:allay",
+    "aspects": {
+      "aspectslib:spiritus": 6,
+      "aspectslib:volatus": 4,
+      "aspectslib:sensus": 4,
+      "aspectslib:cognitio": 3,
+      "aspectslib:lux": 2
+    }
+  }
+]

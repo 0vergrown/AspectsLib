@@ -68,9 +68,9 @@ public class AspectManager extends JsonDataLoader implements IdentifiableResourc
                     .resultOrPartial(error -> AspectsLib.LOGGER.error("Failed to parse aspect data {}: {}", id, error))
                     .ifPresent(aspect -> {
                         ModRegistries.ASPECTS.put(id, aspect);
-                        NAME_TO_ID.put(aspect.name(), id);
+                        NAME_TO_ID.put(id.getPath(), id);
                         loadedCount.getAndIncrement();
-                        AspectsLib.LOGGER.debug("Loaded aspect: {} -> {}", aspect.name(), id);
+                        AspectsLib.LOGGER.debug("Loaded aspect: {} -> {}", id.getPath(), id);
                     });
         }
 

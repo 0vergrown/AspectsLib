@@ -1,0 +1,525 @@
+[
+  {
+    "biome": "minecraft:plains",
+    "aspects": {
+      "aspectslib:herba": 6,
+      "aspectslib:terra": 4,
+      "aspectslib:aer": 3,
+      "aspectslib:victus": 2
+    }
+  },
+  {
+    "biome": "minecraft:sunflower_plains",
+    "aspects": {
+      "aspectslib:herba": 8,
+      "aspectslib:terra": 4,
+      "aspectslib:aer": 3,
+      "aspectslib:victus": 3,
+      "aspectslib:lux": 2
+    }
+  },
+  {
+    "biome": "minecraft:forest",
+    "aspects": {
+      "aspectslib:herba": 12,
+      "aspectslib:terra": 6,
+      "aspectslib:aer": 4,
+      "aspectslib:victus": 4
+    }
+  },
+  {
+    "biome": "minecraft:flower_forest",
+    "aspects": {
+      "aspectslib:herba": 10,
+      "aspectslib:terra": 5,
+      "aspectslib:aer": 4,
+      "aspectslib:victus": 5,
+      "aspectslib:sensus": 6
+    }
+  },
+  {
+    "biome": "minecraft:birch_forest",
+    "aspects": {
+      "aspectslib:herba": 10,
+      "aspectslib:terra": 5,
+      "aspectslib:aer": 5,
+      "aspectslib:victus": 3
+    }
+  },
+  {
+    "biome": "minecraft:dark_forest",
+    "aspects": {
+      "aspectslib:herba": 14,
+      "aspectslib:terra": 8,
+      "aspectslib:tenebrae": 8,
+      "aspectslib:spiritus": 4
+    }
+  },
+  {
+    "biome": "minecraft:old_growth_birch_forest",
+    "aspects": {
+      "aspectslib:herba": 16,
+      "aspectslib:terra": 8,
+      "aspectslib:aer": 6,
+      "aspectslib:victus": 4
+    }
+  },
+  {
+    "biome": "minecraft:old_growth_pine_taiga",
+    "aspects": {
+      "aspectslib:herba": 18,
+      "aspectslib:terra": 10,
+      "aspectslib:gelum": 4,
+      "aspectslib:victus": 3
+    }
+  },
+  {
+    "biome": "minecraft:old_growth_spruce_taiga",
+    "aspects": {
+      "aspectslib:herba": 20,
+      "aspectslib:terra": 12,
+      "aspectslib:gelum": 5,
+      "aspectslib:victus": 4
+    }
+  },
+  {
+    "biome": "minecraft:taiga",
+    "aspects": {
+      "aspectslib:herba": 8,
+      "aspectslib:terra": 6,
+      "aspectslib:gelum": 3,
+      "aspectslib:bestia": 3
+    }
+  },
+  {
+    "biome": "minecraft:snowy_taiga",
+    "aspects": {
+      "aspectslib:herba": 6,
+      "aspectslib:terra": 5,
+      "aspectslib:gelum": 8,
+      "aspectslib:aqua": 3
+    }
+  },
+  {
+    "biome": "minecraft:savanna",
+    "aspects": {
+      "aspectslib:herba": 4,
+      "aspectslib:terra": 6,
+      "aspectslib:ignis": 3,
+      "aspectslib:perditio": 2
+    }
+  },
+  {
+    "biome": "minecraft:savanna_plateau",
+    "aspects": {
+      "aspectslib:herba": 3,
+      "aspectslib:terra": 8,
+      "aspectslib:ignis": 4,
+      "aspectslib:aer": 3
+    }
+  },
+  {
+    "biome": "minecraft:windswept_savanna",
+    "aspects": {
+      "aspectslib:herba": 2,
+      "aspectslib:terra": 8,
+      "aspectslib:ignis": 5,
+      "aspectslib:aer": 6,
+      "aspectslib:perditio": 3
+    }
+  },
+  {
+    "biome": "minecraft:desert",
+    "aspects": {
+      "aspectslib:terra": 8,
+      "aspectslib:ignis": 6,
+      "aspectslib:perditio": 5,
+      "aspectslib:aer": 4
+    }
+  },
+  {
+    "biome": "minecraft:swamp",
+    "aspects": {
+      "aspectslib:aqua": 8,
+      "aspectslib:herba": 6,
+      "aspectslib:terra": 4,
+      "aspectslib:vitium": 3,
+      "aspectslib:limus": 4
+    }
+  },
+  {
+    "biome": "minecraft:mangrove_swamp",
+    "aspects": {
+      "aspectslib:aqua": 10,
+      "aspectslib:herba": 10,
+      "aspectslib:terra": 6,
+      "aspectslib:vitium": 2,
+      "aspectslib:victus": 4
+    }
+  },
+  {
+    "biome": "minecraft:jungle",
+    "aspects": {
+      "aspectslib:herba": 16,
+      "aspectslib:terra": 8,
+      "aspectslib:aqua": 6,
+      "aspectslib:victus": 8,
+      "aspectslib:bestia": 6
+    }
+  },
+  {
+    "biome": "minecraft:sparse_jungle",
+    "aspects": {
+      "aspectslib:herba": 10,
+      "aspectslib:terra": 6,
+      "aspectslib:aqua": 4,
+      "aspectslib:victus": 5,
+      "aspectslib:bestia": 4
+    }
+  },
+  {
+    "biome": "minecraft:bamboo_jungle",
+    "aspects": {
+      "aspectslib:herba": 20,
+      "aspectslib:terra": 6,
+      "aspectslib:aqua": 8,
+      "aspectslib:victus": 10,
+      "aspectslib:aer": 4
+    }
+  },
+  {
+    "biome": "minecraft:badlands",
+    "aspects": {
+      "aspectslib:terra": 12,
+      "aspectslib:ignis": 8,
+      "aspectslib:perditio": 6,
+      "aspectslib:metallum": 3
+    }
+  },
+  {
+    "biome": "minecraft:eroded_badlands",
+    "aspects": {
+      "aspectslib:terra": 10,
+      "aspectslib:ignis": 6,
+      "aspectslib:perditio": 10,
+      "aspectslib:aer": 4
+    }
+  },
+  {
+    "biome": "minecraft:wooded_badlands",
+    "aspects": {
+      "aspectslib:terra": 10,
+      "aspectslib:herba": 6,
+      "aspectslib:ignis": 6,
+      "aspectslib:perditio": 4
+    }
+  },
+  {
+    "biome": "minecraft:meadow",
+    "aspects": {
+      "aspectslib:herba": 10,
+      "aspectslib:terra": 4,
+      "aspectslib:aer": 6,
+      "aspectslib:victus": 4,
+      "aspectslib:sensus": 3
+    }
+  },
+  {
+    "biome": "minecraft:grove",
+    "aspects": {
+      "aspectslib:herba": 8,
+      "aspectslib:terra": 6,
+      "aspectslib:gelum": 6,
+      "aspectslib:aqua": 4
+    }
+  },
+  {
+    "biome": "minecraft:snowy_slopes",
+    "aspects": {
+      "aspectslib:terra": 8,
+      "aspectslib:gelum": 10,
+      "aspectslib:aqua": 6,
+      "aspectslib:aer": 6
+    }
+  },
+  {
+    "biome": "minecraft:jagged_peaks",
+    "aspects": {
+      "aspectslib:terra": 16,
+      "aspectslib:gelum": 8,
+      "aspectslib:aer": 8,
+      "aspectslib:ordo": 4
+    }
+  },
+  {
+    "biome": "minecraft:frozen_peaks",
+    "aspects": {
+      "aspectslib:terra": 14,
+      "aspectslib:gelum": 12,
+      "aspectslib:aqua": 6,
+      "aspectslib:aer": 8
+    }
+  },
+  {
+    "biome": "minecraft:stony_peaks",
+    "aspects": {
+      "aspectslib:terra": 18,
+      "aspectslib:aer": 6,
+      "aspectslib:perditio": 3
+    }
+  },
+  {
+    "biome": "minecraft:river",
+    "aspects": {
+      "aspectslib:aqua": 12,
+      "aspectslib:motus": 4,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "biome": "minecraft:frozen_river",
+    "aspects": {
+      "aspectslib:aqua": 8,
+      "aspectslib:gelum": 8,
+      "aspectslib:motus": 2,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "biome": "minecraft:beach",
+    "aspects": {
+      "aspectslib:terra": 4,
+      "aspectslib:aqua": 6,
+      "aspectslib:aer": 4,
+      "aspectslib:perditio": 2
+    }
+  },
+  {
+    "biome": "minecraft:snowy_beach",
+    "aspects": {
+      "aspectslib:terra": 3,
+      "aspectslib:aqua": 4,
+      "aspectslib:gelum": 6,
+      "aspectslib:aer": 4
+    }
+  },
+  {
+    "biome": "minecraft:stony_shore",
+    "aspects": {
+      "aspectslib:terra": 8,
+      "aspectslib:aqua": 6,
+      "aspectslib:aer": 4,
+      "aspectslib:perditio": 1
+    }
+  },
+  {
+    "biome": "minecraft:warm_ocean",
+    "aspects": {
+      "aspectslib:aqua": 16,
+      "aspectslib:victus": 6,
+      "aspectslib:sensus": 4,
+      "aspectslib:lux": 3
+    }
+  },
+  {
+    "biome": "minecraft:lukewarm_ocean",
+    "aspects": {
+      "aspectslib:aqua": 14,
+      "aspectslib:victus": 4,
+      "aspectslib:sensus": 3
+    }
+  },
+  {
+    "biome": "minecraft:ocean",
+    "aspects": {
+      "aspectslib:aqua": 16,
+      "aspectslib:victus": 3,
+      "aspectslib:motus": 2
+    }
+  },
+  {
+    "biome": "minecraft:cold_ocean",
+    "aspects": {
+      "aspectslib:aqua": 14,
+      "aspectslib:gelum": 4,
+      "aspectslib:victus": 2
+    }
+  },
+  {
+    "biome": "minecraft:frozen_ocean",
+    "aspects": {
+      "aspectslib:aqua": 12,
+      "aspectslib:gelum": 8,
+      "aspectslib:terra": 2
+    }
+  },
+  {
+    "biome": "minecraft:deep_ocean",
+    "aspects": {
+      "aspectslib:aqua": 20,
+      "aspectslib:tenebrae": 6,
+      "aspectslib:alienis": 3
+    }
+  },
+  {
+    "biome": "minecraft:deep_cold_ocean",
+    "aspects": {
+      "aspectslib:aqua": 18,
+      "aspectslib:gelum": 6,
+      "aspectslib:tenebrae": 8,
+      "aspectslib:alienis": 4
+    }
+  },
+  {
+    "biome": "minecraft:deep_frozen_ocean",
+    "aspects": {
+      "aspectslib:aqua": 16,
+      "aspectslib:gelum": 10,
+      "aspectslib:tenebrae": 8,
+      "aspectslib:terra": 4
+    }
+  },
+  {
+    "biome": "minecraft:deep_lukewarm_ocean",
+    "aspects": {
+      "aspectslib:aqua": 18,
+      "aspectslib:tenebrae": 6,
+      "aspectslib:victus": 6
+    }
+  },
+  {
+    "biome": "minecraft:mushroom_fields",
+    "aspects": {
+      "aspectslib:herba": 12,
+      "aspectslib:terra": 6,
+      "aspectslib:tenebrae": 4,
+      "aspectslib:alkimia": 6,
+      "aspectslib:alienis": 3
+    }
+  },
+  {
+    "biome": "minecraft:dripstone_caves",
+    "aspects": {
+      "aspectslib:terra": 12,
+      "aspectslib:aqua": 6,
+      "aspectslib:tenebrae": 8,
+      "aspectslib:ordo": 4
+    }
+  },
+  {
+    "biome": "minecraft:lush_caves",
+    "aspects": {
+      "aspectslib:herba": 14,
+      "aspectslib:terra": 8,
+      "aspectslib:aqua": 8,
+      "aspectslib:victus": 6,
+      "aspectslib:tenebrae": 4
+    }
+  },
+  {
+    "biome": "minecraft:deep_dark",
+    "aspects": {
+      "aspectslib:tenebrae": 20,
+      "aspectslib:terra": 12,
+      "aspectslib:exanimis": 8,
+      "aspectslib:spiritus": 6,
+      "aspectslib:sensus": 10
+    }
+  },
+  {
+    "biome": "minecraft:nether_wastes",
+    "aspects": {
+      "aspectslib:ignis": 12,
+      "aspectslib:terra": 6,
+      "aspectslib:perditio": 8,
+      "aspectslib:alienis": 4
+    }
+  },
+  {
+    "biome": "minecraft:soul_sand_valley",
+    "aspects": {
+      "aspectslib:spiritus": 16,
+      "aspectslib:mortuus": 12,
+      "aspectslib:terra": 8,
+      "aspectslib:tenebrae": 8,
+      "aspectslib:ignis": 4
+    }
+  },
+  {
+    "biome": "minecraft:crimson_forest",
+    "aspects": {
+      "aspectslib:herba": 10,
+      "aspectslib:ignis": 10,
+      "aspectslib:vitium": 6,
+      "aspectslib:alienis": 6,
+      "aspectslib:terra": 4
+    }
+  },
+  {
+    "biome": "minecraft:warped_forest",
+    "aspects": {
+      "aspectslib:herba": 12,
+      "aspectslib:ignis": 8,
+      "aspectslib:alienis": 10,
+      "aspectslib:permutatio": 6,
+      "aspectslib:terra": 4
+    }
+  },
+  {
+    "biome": "minecraft:basalt_deltas",
+    "aspects": {
+      "aspectslib:terra": 16,
+      "aspectslib:ignis": 14,
+      "aspectslib:perditio": 6,
+      "aspectslib:ordo": 3
+    }
+  },
+  {
+    "biome": "minecraft:the_end",
+    "aspects": {
+      "aspectslib:alienis": 20,
+      "aspectslib:tenebrae": 16,
+      "aspectslib:terra": 8,
+      "aspectslib:vacuos": 10
+    }
+  },
+  {
+    "biome": "minecraft:small_end_islands",
+    "aspects": {
+      "aspectslib:alienis": 16,
+      "aspectslib:tenebrae": 12,
+      "aspectslib:terra": 6,
+      "aspectslib:vacuos": 12,
+      "aspectslib:aer": 8
+    }
+  },
+  {
+    "biome": "minecraft:end_midlands",
+    "aspects": {
+      "aspectslib:alienis": 18,
+      "aspectslib:tenebrae": 14,
+      "aspectslib:terra": 10,
+      "aspectslib:vacuos": 8
+    }
+  },
+  {
+    "biome": "minecraft:end_highlands",
+    "aspects": {
+      "aspectslib:alienis": 22,
+      "aspectslib:tenebrae": 16,
+      "aspectslib:terra": 12,
+      "aspectslib:aer": 6,
+      "aspectslib:ordo": 4
+    }
+  },
+  {
+    "biome": "minecraft:end_barrens",
+    "aspects": {
+      "aspectslib:alienis": 15,
+      "aspectslib:tenebrae": 20,
+      "aspectslib:terra": 8,
+      "aspectslib:vacuos": 15,
+      "aspectslib:perditio": 6
+    }
+  }
+]

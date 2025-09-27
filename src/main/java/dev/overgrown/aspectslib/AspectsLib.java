@@ -4,9 +4,9 @@ import dev.overgrown.aspectslib.aether.BiomeAetherDensityManager;
 import dev.overgrown.aspectslib.aether.CorruptionManager;
 import dev.overgrown.aspectslib.aether.StructureAetherDensityManager;
 import dev.overgrown.aspectslib.command.AetherDensityCommand;
+import dev.overgrown.aspectslib.command.AspectDebugCommand;
 import dev.overgrown.aspectslib.data.AspectManager;
-import dev.overgrown.aspectslib.data.CustomItemTagManager;
-import dev.overgrown.aspectslib.data.EntityAspectManager;
+import dev.overgrown.aspectslib.data.UniversalAspectManager;
 import dev.overgrown.aspectslib.registry.ModEntities;
 import dev.overgrown.aspectslib.registry.ModItems;
 import dev.overgrown.aspectslib.resonance.ResonanceManager;
@@ -62,6 +62,7 @@ public class AspectsLib implements ModInitializer {
 		// Register commands
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			AetherDensityCommand.register(dispatcher);
+			AspectDebugCommand.register(dispatcher, registryAccess);
 		});
 
 		// Sync aspect data to players when they join
@@ -78,14 +79,10 @@ public class AspectsLib implements ModInitializer {
 		// Initialize and register data managers
 		AspectManager aspectManager = new AspectManager();
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(aspectManager);
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new CustomItemTagManager());
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new UniversalAspectManager());
 
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
 				.registerReloadListener(new ResonanceManager());
-
-		// Register entity aspect manager
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
-				.registerReloadListener(new EntityAspectManager());
 
         // Register Aether density loaders
         ResourceManagerHelper.get(ResourceType.SERVER_DATA)
