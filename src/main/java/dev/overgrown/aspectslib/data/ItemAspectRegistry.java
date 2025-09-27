@@ -1,6 +1,5 @@
 package dev.overgrown.aspectslib.data;
 
-import dev.overgrown.aspectslib.AspectsLib;
 import dev.overgrown.aspectslib.mixin.ItemStackMixin;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -144,32 +143,15 @@ public class ItemAspectRegistry {
         // Then check tag-based mappings
         Item item = Registries.ITEM.get(id);
         if (item != null && item != Items.AIR) {
-            boolean debugLog = id.getPath().contains("oak_planks") || id.getPath().contains("oak_door");
-            if (debugLog && !tagToAspect.isEmpty()) {
-                AspectsLib.LOGGER.debug("Checking tags for {}, {} tags registered", id, tagToAspect.size());
-            }
-            
             for (Map.Entry<Identifier, AspectData> tagEntry : tagToAspect.entrySet()) {
                 TagKey<Item> itemTag = TagKey.of(RegistryKeys.ITEM, tagEntry.getKey());
                 try {
                     if (item.getDefaultStack().isIn(itemTag)) {
-                        if (debugLog) {
-                            AspectsLib.LOGGER.info("Item {} matched tag {}, returning aspects: {}", 
-                                id, tagEntry.getKey(), tagEntry.getValue());
-                        }
                         return tagEntry.getValue();
                     }
                 } catch (Exception e) {
                     // Tag might not be loaded yet, skip it
-                    if (debugLog) {
-                        AspectsLib.LOGGER.debug("Failed to check tag {} for item {}: {}", 
-                            tagEntry.getKey(), id, e.getMessage());
-                    }
                 }
-            }
-            
-            if (debugLog && !tagToAspect.isEmpty()) {
-                AspectsLib.LOGGER.debug("No tags matched for {}", id);
             }
         }
         
@@ -184,18 +166,6 @@ public class ItemAspectRegistry {
      */
     public static void registerTag(Identifier tagId, AspectData aspect) {
         tagToAspect.put(tagId, aspect);
-        AspectsLib.LOGGER.debug("Registered tag aspects for tag {}: {} aspects", tagId, aspect.getMap().size());
-    }
-    
-    /**
-     * Gets aspects for an item, checking both direct mappings and tag-based mappings.
-     * This is now just an alias for get() since get() handles both cases.
-     * 
-     * @param itemId The item identifier
-     * @return The associated AspectData, or DEFAULT if not found
-     */
-    public static AspectData getWithTags(Identifier itemId) {
-        return get(itemId);
     }
 
     /**

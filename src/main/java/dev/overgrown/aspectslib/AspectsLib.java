@@ -6,6 +6,7 @@ import dev.overgrown.aspectslib.aether.StructureAetherDensityManager;
 import dev.overgrown.aspectslib.command.AetherDensityCommand;
 import dev.overgrown.aspectslib.command.AspectDebugCommand;
 import dev.overgrown.aspectslib.command.RecipeAspectCommand;
+import dev.overgrown.aspectslib.command.TagDumpCommand;
 import dev.overgrown.aspectslib.data.AspectManager;
 import dev.overgrown.aspectslib.data.UniversalAspectManager;
 import dev.overgrown.aspectslib.recipe.RecipeAspectManager;
@@ -66,6 +67,7 @@ public class AspectsLib implements ModInitializer {
 			AetherDensityCommand.register(dispatcher);
 			AspectDebugCommand.register(dispatcher, registryAccess);
 			RecipeAspectCommand.register(dispatcher, registryAccess);
+			TagDumpCommand.register(dispatcher);
 		});
 
 		// Sync aspect data to players when they join

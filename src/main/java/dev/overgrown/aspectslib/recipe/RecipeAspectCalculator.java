@@ -113,8 +113,8 @@ public class RecipeAspectCalculator {
             
             Identifier itemId = Registries.ITEM.getId(item);
             
-            // Check ItemAspectRegistry using the new method that includes tags
-            AspectData existingAspects = ItemAspectRegistry.getWithTags(itemId);
+            // Check ItemAspectRegistry (includes tag-based aspects)
+            AspectData existingAspects = ItemAspectRegistry.get(itemId);
             
             // Also check block registry for block items
             if ((existingAspects == null || existingAspects.isEmpty()) && item instanceof net.minecraft.item.BlockItem blockItem) {
@@ -131,28 +131,11 @@ public class RecipeAspectCalculator {
             if (existingAspects != null && !existingAspects.isEmpty()) {
                 baseItems.add(itemId);
                 calculatedAspects.put(itemId, existingAspects);
-                if (itemId.getPath().contains("planks") || itemId.getPath().contains("door") || 
-                    itemId.getPath().contains("log") || itemId.getPath().contains("wool")) {
-                    AspectsLib.LOGGER.info("Base item {} has aspects: {}", itemId, existingAspects);
-                }
-            } else if (itemId.getPath().contains("oak_planks")) {
-                AspectsLib.LOGGER.warn("Oak planks {} has NO aspects! Registry returned: {}", 
-                    itemId, existingAspects);
             }
         }
         
         AspectsLib.LOGGER.info("Identified {} base items with predefined aspects out of {} checked", 
             baseItems.size(), checked);
-        
-        // Log some specific items we expect to have aspects
-        for (String test : new String[]{"minecraft:oak_planks", "minecraft:iron_ingot", "minecraft:diamond"}) {
-            Identifier testId = new Identifier(test);
-            if (baseItems.contains(testId)) {
-                AspectsLib.LOGGER.info("  ✓ {} has aspects", test);
-            } else {
-                AspectsLib.LOGGER.warn("  ✗ {} has NO aspects!", test);
-            }
-        }
     }
     
     private void buildRecipeGraph() {
@@ -171,10 +154,6 @@ public class RecipeAspectCalculator {
                 List<Identifier> ingredientIds = new ArrayList<>();
                 Map<Identifier, Integer> ingredientCounts = new HashMap<>();
                 
-                // Special logging for doors
-                if (outputId.getPath().contains("door")) {
-                    AspectsLib.LOGGER.info("Processing door recipe: {} -> {}", recipe.getId(), outputId);
-                }
                 
                 if (recipe instanceof ShapedRecipe shaped) {
                     extractIngredientsFromShaped(shaped, ingredientIds, ingredientCounts);
@@ -185,11 +164,6 @@ public class RecipeAspectCalculator {
                     extractIngredientsFromCooking(recipe, ingredientIds, ingredientCounts);
                 } else if (recipe instanceof StonecuttingRecipe stonecutting) {
                     extractIngredientsFromStonecutting(stonecutting, ingredientIds, ingredientCounts);
-                }
-                
-                // Log what ingredients were found for doors
-                if (outputId.getPath().contains("door") && !ingredientIds.isEmpty()) {
-                    AspectsLib.LOGGER.info("Door recipe {} ingredients: {}", recipe.getId(), ingredientCounts);
                 }
                 
                 if (!ingredientIds.isEmpty()) {
@@ -245,13 +219,10 @@ public class RecipeAspectCalculator {
     
     private void extractIngredient(Ingredient ingredient, List<Identifier> ids, Map<Identifier, Integer> counts) {
         if (ingredient == null || ingredient.isEmpty()) {
-            AspectsLib.LOGGER.debug("      Skipping null/empty ingredient");
             return;
         }
         
         ItemStack[] stacks = ingredient.getMatchingStacks();
-        AspectsLib.LOGGER.debug("      Ingredient has {} matching stacks", stacks.length);
-        
         if (stacks.length == 0) return;
         
         Identifier bestItemId = null;
@@ -262,22 +233,17 @@ public class RecipeAspectCalculator {
             if (stack == null || stack.isEmpty()) continue;
             
             Identifier itemId = Registries.ITEM.getId(stack.getItem());
-            AspectsLib.LOGGER.debug("      Checking option: {}", itemId);
-            
             AspectData existingAspects = getItemAspects(itemId);
             
             if (existingAspects != null && !existingAspects.isEmpty()) {
                 hasAnyAspects = true;
                 double totalValue = existingAspects.calculateTotalRU();
                 
-                AspectsLib.LOGGER.debug("        Option {} has {} RU", itemId, totalValue);
-                
                 if (totalValue < lowestAspectValue) {
                     lowestAspectValue = totalValue;
                     bestItemId = itemId;
                 }
             } else {
-                AspectsLib.LOGGER.debug("        Option {} has NO aspects", itemId);
                 if (!hasAnyAspects && bestItemId == null) {
                     bestItemId = itemId;
                 }
@@ -287,35 +253,23 @@ public class RecipeAspectCalculator {
         if (bestItemId != null) {
             ids.add(bestItemId);
             counts.merge(bestItemId, 1, Integer::sum);
-            AspectsLib.LOGGER.debug("      Selected ingredient: {}", bestItemId);
         } else if (stacks.length > 0 && stacks[0] != null && !stacks[0].isEmpty()) {
             Identifier itemId = Registries.ITEM.getId(stacks[0].getItem());
             ids.add(itemId);
             counts.merge(itemId, 1, Integer::sum);
-            AspectsLib.LOGGER.debug("      Fallback to first stack: {}", itemId);
-        } else {
-            AspectsLib.LOGGER.warn("      Could not extract any ingredient!");
         }
     }
     
     private AspectData getItemAspects(Identifier itemId) {
-        AspectsLib.LOGGER.info("        Getting aspects for {}", itemId);
-        
         // Check cache first
         AspectData cached = calculatedAspects.get(itemId);
-        AspectsLib.LOGGER.info("          Cached check: cached={}, contains={}", cached, calculatedAspects.containsKey(itemId));
         if (cached != null) {
-            AspectsLib.LOGGER.info("          RETURNING CACHED: {}", cached);
             return cached;
         }
-        AspectsLib.LOGGER.info("          Not in cache, continuing...");
         
-        // Look up using the new method that checks both direct and tag-based mappings
-        AspectData registryAspects = ItemAspectRegistry.getWithTags(itemId);
-        AspectsLib.LOGGER.info("          ItemAspectRegistry.getWithTags({}) returned: {}", itemId, registryAspects);
-        
+        // Look up using the method that checks both direct and tag-based mappings
+        AspectData registryAspects = ItemAspectRegistry.get(itemId);
         if (registryAspects != null && !registryAspects.isEmpty()) {
-            AspectsLib.LOGGER.info("          ✓ FOUND ASPECTS in registry for {}: {}", itemId, registryAspects);
             return registryAspects;
         }
         
@@ -325,15 +279,12 @@ public class RecipeAspectCalculator {
             Block block = blockItem.getBlock();
             Identifier blockId = Registries.BLOCK.getId(block);
             AspectData blockAspects = BlockAspectRegistry.get(blockId);
-            AspectsLib.LOGGER.info("          BlockAspectRegistry.get({}) returned: {}", blockId, blockAspects);
             
             if (blockAspects != null && !blockAspects.isEmpty()) {
-                AspectsLib.LOGGER.info("          ✓ FOUND ASPECTS in block registry for {}: {}", blockId, blockAspects);
                 return blockAspects;
             }
         }
         
-        AspectsLib.LOGGER.info("          NO ASPECTS FOUND - returning DEFAULT for {}", itemId);
         return AspectData.DEFAULT;
     }
     
@@ -498,7 +449,6 @@ public class RecipeAspectCalculator {
         }
         
         if (processingItems.contains(itemId)) {
-            AspectsLib.LOGGER.debug("Skipping {} - circular dependency detected", itemId);
             return AspectData.DEFAULT;
         }
         
@@ -507,50 +457,29 @@ public class RecipeAspectCalculator {
         RecipeNode node = recipeGraph.get(itemId);
         if (node == null || node.recipes.isEmpty()) {
             processingItems.remove(itemId);
-            AspectsLib.LOGGER.debug("No recipes found for {}", itemId);
             return AspectData.DEFAULT;
         }
-        
-        AspectsLib.LOGGER.info("Calculating aspects for {} ({} recipes available)", itemId, node.recipes.size());
         
         AspectData bestAspects = null;
         double bestValue = Double.MAX_VALUE;
         RecipeEntry bestRecipe = null;
         
         for (RecipeEntry recipeEntry : node.recipes) {
-            AspectsLib.LOGGER.debug("  Trying recipe {} with {} ingredients", 
-                recipeEntry.recipe.getId(), recipeEntry.ingredientCounts.size());
-            
             AspectData recipeAspects = calculateRecipeAspects(recipeEntry);
             if (recipeAspects != null && !recipeAspects.isEmpty()) {
                 double totalValue = recipeAspects.calculateTotalRU();
-                AspectsLib.LOGGER.debug("    Recipe produced {} RU", totalValue);
                 
                 if (bestAspects == null || totalValue < bestValue) {
                     bestAspects = recipeAspects;
                     bestValue = totalValue;
                     bestRecipe = recipeEntry;
                 }
-            } else {
-                AspectsLib.LOGGER.debug("    Recipe produced no aspects");
             }
         }
         
         if (bestAspects != null) {
             calculatedAspects.put(itemId, bestAspects);
             node.cachedAspects = bestAspects;
-            AspectsLib.LOGGER.info("✓ {} calculated with {} total RU from recipe {}", 
-                itemId, bestValue, bestRecipe != null ? bestRecipe.recipe.getId() : "unknown");
-            
-            // Log the actual aspects
-            StringBuilder aspectStr = new StringBuilder();
-            for (Map.Entry<Identifier, Integer> entry : bestAspects.getMap().entrySet()) {
-                if (aspectStr.length() > 0) aspectStr.append(", ");
-                aspectStr.append(entry.getKey().getPath()).append(":").append(entry.getValue());
-            }
-            AspectsLib.LOGGER.debug("    Aspects: {}", aspectStr);
-        } else {
-            AspectsLib.LOGGER.warn("✗ {} - no valid recipe produced aspects", itemId);
         }
         
         processingItems.remove(itemId);
@@ -560,79 +489,42 @@ public class RecipeAspectCalculator {
     private AspectData calculateRecipeAspects(RecipeEntry recipeEntry) {
         Object2IntOpenHashMap<Identifier> combinedAspects = new Object2IntOpenHashMap<>();
         
-        AspectsLib.LOGGER.info("    === Calculating recipe {} ===", recipeEntry.recipe.getId());
-        AspectsLib.LOGGER.info("    Output count: {}, Type: {}", recipeEntry.outputCount, recipeEntry.type);
-        AspectsLib.LOGGER.info("    Total ingredients: {}", recipeEntry.ingredientCounts.size());
-        
         for (Map.Entry<Identifier, Integer> ingredient : recipeEntry.ingredientCounts.entrySet()) {
             Identifier ingredientId = ingredient.getKey();
             int count = ingredient.getValue();
             
-            AspectsLib.LOGGER.info("      Processing ingredient: {}x{}", count, ingredientId);
-            
             AspectData ingredientAspects = calculatedAspects.get(ingredientId);
-            AspectsLib.LOGGER.info("        From cache: {}", ingredientAspects);
-            
             if (ingredientAspects == null) {
-                AspectsLib.LOGGER.info("        Not cached, fetching...");
                 ingredientAspects = getItemAspects(ingredientId);
-                AspectsLib.LOGGER.info("        Fetched: {}", ingredientAspects);
             }
-            
-            boolean hasAspects = (ingredientAspects != null && !ingredientAspects.isEmpty());
-            AspectsLib.LOGGER.info("        Has aspects: {} (null={}, empty={})", hasAspects, 
-                ingredientAspects == null, ingredientAspects != null ? ingredientAspects.isEmpty() : "N/A");
             
             if (ingredientAspects != null && !ingredientAspects.isEmpty()) {
-                AspectsLib.LOGGER.info("        {}x{} HAS {} aspects", count, ingredientId, 
-                    ingredientAspects.getMap().size());
-                
                 for (Map.Entry<Identifier, Integer> aspectEntry : ingredientAspects.getMap().entrySet()) {
                     int totalAmount = aspectEntry.getValue() * count;
-                    int oldValue = combinedAspects.getInt(aspectEntry.getKey());
                     combinedAspects.merge(aspectEntry.getKey(), totalAmount, Integer::sum);
-                    int newValue = combinedAspects.getInt(aspectEntry.getKey());
-                    AspectsLib.LOGGER.info("          {} : {} * {} = {} (was {}, now {})", 
-                        aspectEntry.getKey().getPath(), aspectEntry.getValue(), count, totalAmount, oldValue, newValue);
                 }
-            } else {
-                AspectsLib.LOGGER.warn("        {}x{} has NO ASPECTS!", count, ingredientId);
             }
         }
         
-        boolean isEmpty = combinedAspects.isEmpty();
-        AspectsLib.LOGGER.info("    Combined aspects empty: {} (size={})", isEmpty, combinedAspects.size());
-        
         if (combinedAspects.isEmpty()) {
-            AspectsLib.LOGGER.warn("    NO ASPECTS FROM INGREDIENTS! Returning DEFAULT");
             return AspectData.DEFAULT;
         }
-        
-        AspectsLib.LOGGER.info("    Combined aspects BEFORE loss: {}", combinedAspects);
         
         double lossFactor;
         if (recipeEntry.type == RecipeType.CRAFTING) {
             lossFactor = config.getCraftingLoss();
-            AspectsLib.LOGGER.info("    Recipe type: CRAFTING, loss factor: {}", lossFactor);
         } else if (recipeEntry.type == RecipeType.SMELTING || 
                    recipeEntry.type == RecipeType.BLASTING || 
                    recipeEntry.type == RecipeType.SMOKING ||
                    recipeEntry.type == RecipeType.CAMPFIRE_COOKING) {
             lossFactor = config.getSmeltingLoss();
-            AspectsLib.LOGGER.info("    Recipe type: SMELTING/COOKING, loss factor: {}", lossFactor);
         } else if (recipeEntry.type == RecipeType.SMITHING) {
             lossFactor = config.getSmithingLoss();
-            AspectsLib.LOGGER.info("    Recipe type: SMITHING, loss factor: {}", lossFactor);
         } else if (recipeEntry.type == RecipeType.STONECUTTING) {
             lossFactor = config.getStonecuttingLoss();
-            AspectsLib.LOGGER.info("    Recipe type: STONECUTTING, loss factor: {}", lossFactor);
         } else {
             lossFactor = config.getCraftingLoss();
-            AspectsLib.LOGGER.info("    Recipe type: OTHER ({}), loss factor: {}", recipeEntry.type, lossFactor);
         }
-        
-        AspectsLib.LOGGER.info("    Applying loss factor {} and dividing by {} outputs", 
-            lossFactor, recipeEntry.outputCount);
         
         for (Identifier aspectId : combinedAspects.keySet()) {
             int originalValue = combinedAspects.getInt(aspectId);
@@ -640,12 +532,7 @@ public class RecipeAspectCalculator {
             int adjustedValue = (int) Math.ceil(calculation);
             int finalValue = Math.max(1, adjustedValue);
             combinedAspects.put(aspectId, finalValue);
-            AspectsLib.LOGGER.info("      {} : {} * {} / {} = {} -> ceil={} -> max(1)={}", 
-                aspectId.getPath(), originalValue, lossFactor, recipeEntry.outputCount, 
-                calculation, adjustedValue, finalValue);
         }
-        
-        AspectsLib.LOGGER.info("    Final combined aspects: {}", combinedAspects);
         
         return new AspectData(combinedAspects);
     }

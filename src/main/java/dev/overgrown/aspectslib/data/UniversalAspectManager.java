@@ -63,9 +63,6 @@ public class UniversalAspectManager extends JsonDataLoader implements Identifiab
         }
         
         AspectsLib.LOGGER.info("Finished loading universal aspect assignments");
-        AspectsLib.LOGGER.info("  - Loaded {} item aspects", ItemAspectRegistry.size());
-        AspectsLib.LOGGER.info("  - Loaded {} tag-based aspects", ItemAspectRegistry.tagSize());
-        AspectsLib.LOGGER.info("  - Registered tags: {}", ItemAspectRegistry.getRegisteredTags());
     }
 
     private void processAssignment(JsonObject assignment) {
@@ -85,7 +82,6 @@ public class UniversalAspectManager extends JsonDataLoader implements Identifiab
             String itemId = JsonHelper.getString(assignment, "item");
             Identifier id = new Identifier(itemId);
             ItemAspectRegistry.register(id, aspectData);
-            AspectsLib.LOGGER.debug("Registered aspects for item {}: {}", id, aspectData);
         } else if (assignment.has("item_tag")) {
             String tagId = JsonHelper.getString(assignment, "item_tag");
             if (tagId.startsWith("#")) {
@@ -95,7 +91,6 @@ public class UniversalAspectManager extends JsonDataLoader implements Identifiab
             
             // Register the tag for lazy resolution
             ItemAspectRegistry.registerTag(tagIdentifier, aspectData);
-            AspectsLib.LOGGER.info("Registered tag aspects for {}: {}", tagId, aspectData);
         } else if (assignment.has("block")) {
             String blockId = JsonHelper.getString(assignment, "block");
             BlockAspectRegistry.register(new Identifier(blockId), aspectData);
