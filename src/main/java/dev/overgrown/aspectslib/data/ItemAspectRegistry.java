@@ -1,6 +1,12 @@
 package dev.overgrown.aspectslib.data;
 
+import dev.overgrown.aspectslib.AspectsLib;
 import dev.overgrown.aspectslib.mixin.ItemStackMixin;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
@@ -43,6 +49,11 @@ public class ItemAspectRegistry {
      * Internal storage for the mappings between Identifiers and AspectData
      */
     private static final HashMap<Identifier, AspectData> idToAspect = new HashMap<>();
+    
+    /**
+     * Storage for tag-based aspects that will be resolved when tags are available
+     */
+    private static final HashMap<Identifier, AspectData> tagToAspect = new HashMap<>();
 
     /**
      * Registers a new association between an `Identifier` and an `AspectData`.
@@ -63,7 +74,7 @@ public class ItemAspectRegistry {
      * @param id     The `Identifier` of the items to update.
      * @param aspect The new `AspectData` to associate with the items.
      */
-    protected static void update(Identifier id, AspectData aspect) {
+    public static void update(Identifier id, AspectData aspect) {
         if(idToAspect.containsKey(id)) {
             AspectData old = idToAspect.get(id);
             idToAspect.remove(id);
@@ -118,12 +129,73 @@ public class ItemAspectRegistry {
 
     /**
      * Retrieves the `AspectData` associated with the specified `Identifier`.
+     * This method now checks both direct mappings and tag-based mappings.
      *
      * @param id The `Identifier` of the items to look up.
      * @return The associated `AspectData`, or DEFAULT if not found.
      */
     public static AspectData get(Identifier id) {
-        return idToAspect.getOrDefault(id, AspectData.DEFAULT);
+        // First check direct mappings
+        AspectData direct = idToAspect.get(id);
+        if (direct != null) {
+            return direct;
+        }
+        
+        // Then check tag-based mappings
+        Item item = Registries.ITEM.get(id);
+        if (item != null && item != Items.AIR) {
+            boolean debugLog = id.getPath().contains("oak_planks") || id.getPath().contains("oak_door");
+            if (debugLog && !tagToAspect.isEmpty()) {
+                AspectsLib.LOGGER.debug("Checking tags for {}, {} tags registered", id, tagToAspect.size());
+            }
+            
+            for (Map.Entry<Identifier, AspectData> tagEntry : tagToAspect.entrySet()) {
+                TagKey<Item> itemTag = TagKey.of(RegistryKeys.ITEM, tagEntry.getKey());
+                try {
+                    if (item.getDefaultStack().isIn(itemTag)) {
+                        if (debugLog) {
+                            AspectsLib.LOGGER.info("Item {} matched tag {}, returning aspects: {}", 
+                                id, tagEntry.getKey(), tagEntry.getValue());
+                        }
+                        return tagEntry.getValue();
+                    }
+                } catch (Exception e) {
+                    // Tag might not be loaded yet, skip it
+                    if (debugLog) {
+                        AspectsLib.LOGGER.debug("Failed to check tag {} for item {}: {}", 
+                            tagEntry.getKey(), id, e.getMessage());
+                    }
+                }
+            }
+            
+            if (debugLog && !tagToAspect.isEmpty()) {
+                AspectsLib.LOGGER.debug("No tags matched for {}", id);
+            }
+        }
+        
+        return AspectData.DEFAULT;
+    }
+    
+    /**
+     * Registers tag-based aspects that will be applied to items with the given tag.
+     * 
+     * @param tagId The tag identifier (without the # prefix)
+     * @param aspect The AspectData to associate with items having this tag
+     */
+    public static void registerTag(Identifier tagId, AspectData aspect) {
+        tagToAspect.put(tagId, aspect);
+        AspectsLib.LOGGER.debug("Registered tag aspects for tag {}: {} aspects", tagId, aspect.getMap().size());
+    }
+    
+    /**
+     * Gets aspects for an item, checking both direct mappings and tag-based mappings.
+     * This is now just an alias for get() since get() handles both cases.
+     * 
+     * @param itemId The item identifier
+     * @return The associated AspectData, or DEFAULT if not found
+     */
+    public static AspectData getWithTags(Identifier itemId) {
+        return get(itemId);
     }
 
     /**
@@ -159,6 +231,7 @@ public class ItemAspectRegistry {
      */
     public static void clear() {
         idToAspect.clear();
+        tagToAspect.clear();
     }
 
     /**
@@ -166,5 +239,19 @@ public class ItemAspectRegistry {
      */
     public static void reset() {
         clear();
+    }
+    
+    /**
+     * Gets the number of registered tags.
+     */
+    public static int tagSize() {
+        return tagToAspect.size();
+    }
+    
+    /**
+     * Gets all registered tag identifiers.
+     */
+    public static Set<Identifier> getRegisteredTags() {
+        return new HashSet<>(tagToAspect.keySet());
     }
 }

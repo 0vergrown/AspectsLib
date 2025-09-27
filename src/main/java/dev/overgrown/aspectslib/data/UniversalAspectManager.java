@@ -7,8 +7,11 @@ import com.google.gson.JsonObject;
 import dev.overgrown.aspectslib.AspectsLib;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -60,6 +63,9 @@ public class UniversalAspectManager extends JsonDataLoader implements Identifiab
         }
         
         AspectsLib.LOGGER.info("Finished loading universal aspect assignments");
+        AspectsLib.LOGGER.info("  - Loaded {} item aspects", ItemAspectRegistry.size());
+        AspectsLib.LOGGER.info("  - Loaded {} tag-based aspects", ItemAspectRegistry.tagSize());
+        AspectsLib.LOGGER.info("  - Registered tags: {}", ItemAspectRegistry.getRegisteredTags());
     }
 
     private void processAssignment(JsonObject assignment) {
@@ -77,13 +83,19 @@ public class UniversalAspectManager extends JsonDataLoader implements Identifiab
 
         if (assignment.has("item")) {
             String itemId = JsonHelper.getString(assignment, "item");
-            ItemAspectRegistry.register(new Identifier(itemId), aspectData);
+            Identifier id = new Identifier(itemId);
+            ItemAspectRegistry.register(id, aspectData);
+            AspectsLib.LOGGER.debug("Registered aspects for item {}: {}", id, aspectData);
         } else if (assignment.has("item_tag")) {
             String tagId = JsonHelper.getString(assignment, "item_tag");
             if (tagId.startsWith("#")) {
                 tagId = tagId.substring(1);
             }
-            ItemAspectRegistry.register(new Identifier(tagId), aspectData);
+            Identifier tagIdentifier = new Identifier(tagId);
+            
+            // Register the tag for lazy resolution
+            ItemAspectRegistry.registerTag(tagIdentifier, aspectData);
+            AspectsLib.LOGGER.info("Registered tag aspects for {}: {}", tagId, aspectData);
         } else if (assignment.has("block")) {
             String blockId = JsonHelper.getString(assignment, "block");
             BlockAspectRegistry.register(new Identifier(blockId), aspectData);

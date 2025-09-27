@@ -5,8 +5,10 @@ import dev.overgrown.aspectslib.aether.CorruptionManager;
 import dev.overgrown.aspectslib.aether.StructureAetherDensityManager;
 import dev.overgrown.aspectslib.command.AetherDensityCommand;
 import dev.overgrown.aspectslib.command.AspectDebugCommand;
+import dev.overgrown.aspectslib.command.RecipeAspectCommand;
 import dev.overgrown.aspectslib.data.AspectManager;
 import dev.overgrown.aspectslib.data.UniversalAspectManager;
+import dev.overgrown.aspectslib.recipe.RecipeAspectManager;
 import dev.overgrown.aspectslib.registry.ModEntities;
 import dev.overgrown.aspectslib.registry.ModItems;
 import dev.overgrown.aspectslib.resonance.ResonanceManager;
@@ -63,6 +65,7 @@ public class AspectsLib implements ModInitializer {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			AetherDensityCommand.register(dispatcher);
 			AspectDebugCommand.register(dispatcher, registryAccess);
+			RecipeAspectCommand.register(dispatcher, registryAccess);
 		});
 
 		// Sync aspect data to players when they join
@@ -83,6 +86,11 @@ public class AspectsLib implements ModInitializer {
 
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
 				.registerReloadListener(new ResonanceManager());
+		
+		// Register Recipe Aspect Manager
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
+				.registerReloadListener(new RecipeAspectManager());
+		RecipeAspectManager.initialize();
 
         // Register Aether density loaders
         ResourceManagerHelper.get(ResourceType.SERVER_DATA)
