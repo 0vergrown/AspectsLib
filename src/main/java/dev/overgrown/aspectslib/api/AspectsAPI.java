@@ -182,6 +182,25 @@ public class AspectsAPI {
     }
 
     /**
+     * Gets aspect data for an item by its identifier (includes tag-based aspects)
+     * @param itemId The identifier of the item
+     * @return The aspect data, or AspectData.DEFAULT if none
+     */
+    public static AspectData getItemAspectData(Identifier itemId) {
+        return ItemAspectRegistry.get(itemId);
+    }
+
+    /**
+     * Gets aspect data for an item (includes tag-based aspects)
+     * @param item The item
+     * @return The aspect data, or AspectData.DEFAULT if none
+     */
+    public static AspectData getItemAspectData(Item item) {
+        Identifier itemId = Registries.ITEM.getId(item);
+        return ItemAspectRegistry.get(itemId);
+    }
+
+    /**
      * Gets aspect data for a block
      * @param blockId The identifier of the block
      * @return The aspect data, or AspectData.DEFAULT if none

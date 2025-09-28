@@ -89,45 +89,15 @@ public abstract class ItemStackMixin implements IAspectDataProvider {
             return;
         }
 
-        // Build from registry defaults
-        Object2IntOpenHashMap<Identifier> combinedAspects = new Object2IntOpenHashMap<>();
+        // Get aspects from registry (including tag-based aspects)
         Identifier itemId = Registries.ITEM.getId(getItem());
-        ItemStack self = (ItemStack) (Object) this;
-        boolean hasDirectMatch = false;
-
-        // Check for direct item matches first
-        for (Map.Entry<Identifier, AspectData> entry : ItemAspectRegistry.entries()) {
-            Identifier id = entry.getKey();
-            AspectData itemAspectData = entry.getValue();
-
-            if (itemId.equals(id)) {
-                // Add aspects from direct match
-                for (Object2IntMap.Entry<Identifier> aspectEntry : itemAspectData.getMap().object2IntEntrySet()) {
-                    combinedAspects.merge(aspectEntry.getKey(), aspectEntry.getIntValue(), Integer::sum);
-                }
-                hasDirectMatch = true;
-            }
+        AspectData registryAspects = ItemAspectRegistry.get(itemId);
+        
+        if (registryAspects != null && !registryAspects.isEmpty()) {
+            aspectslib$cachedAspectData = registryAspects;
+        } else {
+            aspectslib$cachedAspectData = null;
         }
-
-        // Only check tags if no direct match found
-        if (!hasDirectMatch) {
-            for (Map.Entry<Identifier, AspectData> entry : ItemAspectRegistry.entries()) {
-                Identifier id = entry.getKey();
-                AspectData itemAspectData = entry.getValue();
-
-                if (!itemId.equals(id)) {
-                    TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), id);
-                    if (self.getRegistryEntry().isIn(tagKey)) {
-                        // Add aspects from tag match
-                        for (Object2IntMap.Entry<Identifier> aspectEntry : itemAspectData.getMap().object2IntEntrySet()) {
-                            combinedAspects.merge(aspectEntry.getKey(), aspectEntry.getIntValue(), Integer::sum);
-                        }
-                    }
-                }
-            }
-        }
-
-        aspectslib$cachedAspectData = combinedAspects.isEmpty() ? null : new AspectData(combinedAspects);
     }
 
     /** Reset cache when NBT changes */

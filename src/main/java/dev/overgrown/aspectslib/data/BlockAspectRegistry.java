@@ -19,7 +19,7 @@ public class BlockAspectRegistry {
         return aspect;
     }
 
-    protected static void update(Identifier id, AspectData aspect) {
+    public static void update(Identifier id, AspectData aspect) {
         if(idToAspect.containsKey(id)) {
             AspectData old = idToAspect.get(id);
             idToAspect.remove(id);
