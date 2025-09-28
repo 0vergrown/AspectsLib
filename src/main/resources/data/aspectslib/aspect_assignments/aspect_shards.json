@@ -227,4 +227,234 @@
       "aspectslib:fames": 1
     }
   }
+=======
+[
+  {
+    "item": "aspectslib:aer_aspect_shard",
+    "aspects": {
+      "aspectslib:aer": 1
+    }
+  },
+  {
+    "item": "aspectslib:aqua_aspect_shard",
+    "aspects": {
+      "aspectslib:aqua": 1
+    }
+  },
+  {
+    "item": "aspectslib:ignis_aspect_shard",
+    "aspects": {
+      "aspectslib:ignis": 1
+    }
+  },
+  {
+    "item": "aspectslib:ordo_aspect_shard",
+    "aspects": {
+      "aspectslib:ordo": 1
+    }
+  },
+  {
+    "item": "aspectslib:perditio_aspect_shard",
+    "aspects": {
+      "aspectslib:perditio": 1
+    }
+  },
+  {
+    "item": "aspectslib:terra_aspect_shard",
+    "aspects": {
+      "aspectslib:terra": 1
+    }
+  },
+  {
+    "item": "aspectslib:gelum_aspect_shard",
+    "aspects": {
+      "aspectslib:gelum": 1
+    }
+  },
+  {
+    "item": "aspectslib:lux_aspect_shard",
+    "aspects": {
+      "aspectslib:lux": 1
+    }
+  },
+  {
+    "item": "aspectslib:metallum_aspect_shard",
+    "aspects": {
+      "aspectslib:metallum": 1
+    }
+  },
+  {
+    "item": "aspectslib:mortuus_aspect_shard",
+    "aspects": {
+      "aspectslib:mortuus": 1
+    }
+  },
+  {
+    "item": "aspectslib:motus_aspect_shard",
+    "aspects": {
+      "aspectslib:motus": 1
+    }
+  },
+  {
+    "item": "aspectslib:permutatio_aspect_shard",
+    "aspects": {
+      "aspectslib:permutatio": 1
+    }
+  },
+  {
+    "item": "aspectslib:potentia_aspect_shard",
+    "aspects": {
+      "aspectslib:potentia": 1
+    }
+  },
+  {
+    "item": "aspectslib:vacuos_aspect_shard",
+    "aspects": {
+      "aspectslib:vacuos": 1
+    }
+  },
+  {
+    "item": "aspectslib:victus_aspect_shard",
+    "aspects": {
+      "aspectslib:victus": 1
+    }
+  },
+  {
+    "item": "aspectslib:vitreus_aspect_shard",
+    "aspects": {
+      "aspectslib:vitreus": 1
+    }
+  },
+  {
+    "item": "aspectslib:bestia_aspect_shard",
+    "aspects": {
+      "aspectslib:bestia": 1
+    }
+  },
+  {
+    "item": "aspectslib:exanimis_aspect_shard",
+    "aspects": {
+      "aspectslib:exanimis": 1
+    }
+  },
+  {
+    "item": "aspectslib:herba_aspect_shard",
+    "aspects": {
+      "aspectslib:herba": 1
+    }
+  },
+  {
+    "item": "aspectslib:instrumentum_aspect_shard",
+    "aspects": {
+      "aspectslib:instrumentum": 1
+    }
+  },
+  {
+    "item": "aspectslib:praecantatio_aspect_shard",
+    "aspects": {
+      "aspectslib:praecantatio": 1
+    }
+  },
+  {
+    "item": "aspectslib:spiritus_aspect_shard",
+    "aspects": {
+      "aspectslib:spiritus": 1
+    }
+  },
+  {
+    "item": "aspectslib:tenebrae_aspect_shard",
+    "aspects": {
+      "aspectslib:tenebrae": 1
+    }
+  },
+  {
+    "item": "aspectslib:vinculum_aspect_shard",
+    "aspects": {
+      "aspectslib:vinculum": 1
+    }
+  },
+  {
+    "item": "aspectslib:volatus_aspect_shard",
+    "aspects": {
+      "aspectslib:volatus": 1
+    }
+  },
+  {
+    "item": "aspectslib:alienis_aspect_shard",
+    "aspects": {
+      "aspectslib:alienis": 1
+    }
+  },
+  {
+    "item": "aspectslib:alkimia_aspect_shard",
+    "aspects": {
+      "aspectslib:alkimia": 1
+    }
+  },
+  {
+    "item": "aspectslib:auram_aspect_shard",
+    "aspects": {
+      "aspectslib:auram": 1
+    }
+  },
+  {
+    "item": "aspectslib:aversio_aspect_shard",
+    "aspects": {
+      "aspectslib:aversio": 1
+    }
+  },
+  {
+    "item": "aspectslib:cognitio_aspect_shard",
+    "aspects": {
+      "aspectslib:cognitio": 1
+    }
+  },
+  {
+    "item": "aspectslib:desiderium_aspect_shard",
+    "aspects": {
+      "aspectslib:desiderium": 1
+    }
+  },
+  {
+    "item": "aspectslib:fabrico_aspect_shard",
+    "aspects": {
+      "aspectslib:fabrico": 1
+    }
+  },
+  {
+    "item": "aspectslib:humanus_aspect_shard",
+    "aspects": {
+      "aspectslib:humanus": 1
+    }
+  },
+  {
+    "item": "aspectslib:machina_aspect_shard",
+    "aspects": {
+      "aspectslib:machina": 1
+    }
+  },
+  {
+    "item": "aspectslib:praemunio_aspect_shard",
+    "aspects": {
+      "aspectslib:praemunio": 1
+    }
+  },
+  {
+    "item": "aspectslib:sensus_aspect_shard",
+    "aspects": {
+      "aspectslib:sensus": 1
+    }
+  },
+  {
+    "item": "aspectslib:vitium_aspect_shard",
+    "aspects": {
+      "aspectslib:vitium": 1
+    }
+  },
+  {
+    "item": "aspectslib:fames_aspect_shard",
+    "aspects": {
+      "aspectslib:fames": 1
+    }
+  }
 ]
