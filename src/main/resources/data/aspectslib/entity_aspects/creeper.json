@@ -1,8 +1,0 @@
-{
-  "entity": "minecraft:creeper",
-  "aspects": {
-    "aspectslib:ignis": 10,
-    "aspectslib:perditio": 7,
-    "aspectslib:volatus": 2
-  }
-}

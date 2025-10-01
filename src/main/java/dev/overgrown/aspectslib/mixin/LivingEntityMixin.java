@@ -55,6 +55,7 @@ public abstract class LivingEntityMixin extends Entity implements IAspectAffinit
             AspectData data = EntityAspectRegistry.get(entityId);
             if (data != null) {
                 this.aspectslib$setAspectData(data);
+                this.aspectslib$setOriginalAspectData(data); // Store original for reference
             }
         }
     }

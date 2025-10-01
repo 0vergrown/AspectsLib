@@ -15,6 +15,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -42,6 +43,11 @@ public class AspectData {
     private static Codec<Object2IntOpenHashMap<Identifier>> getInlineCodec() {
         return Codec.unboundedMap(Identifier.CODEC, Codec.INT)
                 .xmap(Object2IntOpenHashMap::new, Function.identity());
+    }
+
+    public AspectData(Map<Identifier, Integer> aspects) {
+        this.aspects = new Object2IntOpenHashMap<>();
+        this.aspects.putAll(aspects);
     }
 
     private static Codec<AspectData> getBaseCodec() {

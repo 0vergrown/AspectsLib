@@ -2,8 +2,9 @@ package dev.overgrown.aspectslib.entity.aura_node;
 
 import dev.overgrown.aspectslib.AspectsLib;
 import dev.overgrown.aspectslib.data.AspectData;
+import dev.overgrown.aspectslib.data.BiomeAspectModifier;
+import dev.overgrown.aspectslib.data.BiomeAspectRegistry;
 import dev.overgrown.aspectslib.resonance.ResonanceCalculator;
-import dev.overgrown.aspectslib.aether.DynamicAetherDensityManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
@@ -149,11 +150,12 @@ public class AuraNodeEntity extends Entity {
             Identifier biomeId = biomeEntry.getKey().map(RegistryKey::getValue).orElse(null);
 
             if (biomeId != null) {
-                DynamicAetherDensityManager.addModification(
-                        biomeId,
-                        VITIUM_ASPECT,
-                        10 // Add 10 Vitium per corruption cycle
-                );
+                AspectData currentBiomeAspects = BiomeAspectRegistry.get(biomeId);
+                if (!currentBiomeAspects.isEmpty()) {
+                    AspectData.Builder builder = new AspectData.Builder(currentBiomeAspects);
+                    builder.add(VITIUM_ASPECT, 10); // Add Vitium to biome
+                    BiomeAspectRegistry.update(biomeId, builder.build());
+                }
             }
         }
     }
@@ -309,11 +311,7 @@ public class AuraNodeEntity extends Entity {
             Identifier biomeId = biomeEntry.getKey().map(RegistryKey::getValue).orElse(null);
 
             if (biomeId != null) {
-                DynamicAetherDensityManager.addModification(
-                        biomeId,
-                        VITIUM_ASPECT,
-                        10 // Add 10 Vitium per corruption cycle
-                );
+                BiomeAspectModifier.addBiomeModification(biomeId, VITIUM_ASPECT, 10); // Add 10 Vitium per corruption cycle
                 AspectsLib.LOGGER.debug("Sinister node corrupting biome {} at {}", biomeId, this.getBlockPos());
             }
         }
@@ -352,10 +350,18 @@ public class AuraNodeEntity extends Entity {
                 }
             }
             // Phase 2: Consume from environment
-            else if (aspects.containsKey(FAMES_ASPECT)) {
-                if (biomeId != null) {
-                    // Drain 5 from all aspects in the biome
-                    DynamicAetherDensityManager.drainAllAspects(biomeId, 5);
+            else if (aspects.containsKey(FAMES_ASPECT) && biomeId != null) {
+                // Drain from all aspects in the biome
+                AspectData currentBiomeAspects = BiomeAspectRegistry.get(biomeId);
+                if (!currentBiomeAspects.isEmpty()) {
+                    AspectData.Builder builder = new AspectData.Builder(AspectData.DEFAULT);
+                    for (Identifier aspectId : currentBiomeAspects.getAspectIds()) {
+                        int currentAmount = currentBiomeAspects.getLevel(aspectId);
+                        if (currentAmount > 0) {
+                            builder.add(aspectId, -Math.min(5, currentAmount)); // Drain 5 or whatever remains
+                        }
+                    }
+                    // TODO: Apply the drainage (Need to handle this based on the new system)
                     AspectsLib.LOGGER.debug("Hungry node draining environment at {}", this.getBlockPos());
                 }
 

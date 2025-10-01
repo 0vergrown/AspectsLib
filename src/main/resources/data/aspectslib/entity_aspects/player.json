@@ -1,7 +1,0 @@
-{
-  "entity": "minecraft:player",
-  "aspects": {
-    "aspectslib:humanus": 10,
-    "aspectslib:cognitio": 5
-  }
-}

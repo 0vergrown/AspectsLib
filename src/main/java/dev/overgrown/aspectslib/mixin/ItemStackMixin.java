@@ -3,13 +3,10 @@ package dev.overgrown.aspectslib.mixin;
 import dev.overgrown.aspectslib.api.IAspectDataProvider;
 import dev.overgrown.aspectslib.data.AspectData;
 import dev.overgrown.aspectslib.data.ItemAspectRegistry;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,24 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Map;
 import java.util.Objects;
-
-/**
- * Mixin to add aspect data support to ItemStack.
- * <p>
- * Responsibilities:
- * <ol type="1">
- * <li>Attaches AspectData to ItemStack via NBT</li>
- * <li>Handles initialization from tags/registry</li>
- * <li>Manages data copying and cache invalidation</li>
- * </ol>
- * <p>
- * Important Connections:
- * <li>{@link IAspectDataProvider}: Interface implemented by this mixin</li>
- * <li>{@link ItemAspectRegistry}: Source of default item aspects</li>
- * <li>{@link AspectData}: Actual aspect storage</li>
- */
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements IAspectDataProvider {

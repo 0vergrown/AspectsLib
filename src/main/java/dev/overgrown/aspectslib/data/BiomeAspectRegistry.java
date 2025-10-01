@@ -32,7 +32,7 @@ public class BiomeAspectRegistry {
         return aspect;
     }
 
-    protected static void update(RegistryKey<Biome> key, AspectData aspect) {
+    public static void update(RegistryKey<Biome> key, AspectData aspect) {
         if(keyToAspect.containsKey(key)) {
             AspectData old = keyToAspect.get(key);
             keyToAspect.remove(key);
@@ -40,7 +40,7 @@ public class BiomeAspectRegistry {
         register(key, aspect);
     }
 
-    protected static void update(Identifier id, AspectData aspect) {
+    public static void update(Identifier id, AspectData aspect) {
         if(idToAspect.containsKey(id)) {
             AspectData old = idToAspect.get(id);
             idToAspect.remove(id);

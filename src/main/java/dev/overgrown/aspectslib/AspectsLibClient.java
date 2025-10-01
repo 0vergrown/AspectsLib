@@ -43,11 +43,11 @@ public class AspectsLibClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Initialize default tooltip visibility to shown
-        AspectsTooltipConfig.setAlwaysShow(false);
+        AspectsTooltipConfig.setAlwaysShow(true);
 
         // Initialize aura node visibility to hidden by default
         // No conditions are set by default - other mods must add them via API
-        AuraNodeVisibilityConfig.setAlwaysShow(false);
+        AuraNodeVisibilityConfig.setAlwaysShow(true);
 
         EntityRendererRegistry.register(ModEntities.AURA_NODE, AuraNodeRenderer::new);
 
