@@ -5,6 +5,8 @@ import dev.overgrown.aspectslib.aether.PlayerAetherStorage;
 import dev.overgrown.aspectslib.command.AspectDebugCommand;
 import dev.overgrown.aspectslib.command.RecipeAspectCommand;
 import dev.overgrown.aspectslib.command.TagDumpCommand;
+import dev.overgrown.aspectslib.command.VitiumCorruptionCommand;
+import dev.overgrown.aspectslib.corruption.VitiumCorruptionManager;
 import dev.overgrown.aspectslib.data.AspectManager;
 import dev.overgrown.aspectslib.data.UniversalAspectManager;
 import dev.overgrown.aspectslib.recipe.RecipeAspectManager;
@@ -41,6 +43,7 @@ public class AspectsLib implements ModInitializer {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			AspectDebugCommand.register(dispatcher, registryAccess);
 			RecipeAspectCommand.register(dispatcher, registryAccess);
+            VitiumCorruptionCommand.register(dispatcher, registryAccess);
 			TagDumpCommand.register(dispatcher);
 		});
 
@@ -76,13 +79,18 @@ public class AspectsLib implements ModInitializer {
             // Tick player Aether storage
             PlayerAetherStorage playerStorage = PlayerAetherStorage.get(world);
             playerStorage.tick();
+
+            // Tick Vitium corruption manager
+            VitiumCorruptionManager corruptionManager = VitiumCorruptionManager.get(world);
+            corruptionManager.tick();
         });
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            // Save all Aether data
+            // Save all Aether and Corruption data
             for (ServerWorld world : server.getWorlds()) {
                 DeadZoneManager.get(world).markDirty();
                 PlayerAetherStorage.get(world).markDirty();
+                VitiumCorruptionManager.get(world).markDirty();
             }
         });
 
