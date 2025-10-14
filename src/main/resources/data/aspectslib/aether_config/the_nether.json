@@ -1,0 +1,6 @@
+{
+  "recoveryRate": 0.5,
+  "permanentDeadZoneThreshold": 5000,
+  "temporaryDeadZoneRecoveryThreshold": 0.05,
+  "chunkVolume": 32768
+}
