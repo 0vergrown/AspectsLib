@@ -215,14 +215,14 @@ public class CorruptionManager {
 
         // Calculate total aether remaining in the chunk
         int totalAether = 0;
-        for (Identifier aspectId : aetherData.getAspects().keySet()) {
+        for (Identifier aspectId : aetherData.getAspectIds()) {
             totalAether += aetherData.getCurrentAether(aspectId);
         }
 
         if (totalAether > 0) {
             // Find an aspect with aether to consume (prioritize non-Vitium aspects)
             Identifier targetAspect = null;
-            for (Identifier aspectId : aetherData.getAspects().keySet()) {
+            for (Identifier aspectId : aetherData.getAspectIds()) {
                 if (aetherData.getCurrentAether(aspectId) > 0) {
                     targetAspect = aspectId;
                     if (!aspectId.equals(VITIUM_ID)) {

@@ -12,8 +12,10 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static dev.overgrown.aspectslib.corruption.CorruptionManager.VITIUM_ID;
 
@@ -223,6 +225,10 @@ public class AetherChunkData {
         int max = getMaxAether(aspectId);
         if (max == 0) return 0;
         return (double) getCurrentAether(aspectId) / max;
+    }
+
+    public Set<Identifier> getAspectIds() {
+        return Collections.unmodifiableSet(currentAether.keySet());
     }
 
     public boolean canHarvestVitium() {
