@@ -15,6 +15,8 @@ import net.minecraft.world.biome.Biome;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dev.overgrown.aspectslib.corruption.CorruptionManager.VITIUM_ID;
+
 public class AetherChunkData {
     private final World world;
     private final ChunkPos chunkPos;
@@ -221,6 +223,17 @@ public class AetherChunkData {
         int max = getMaxAether(aspectId);
         if (max == 0) return 0;
         return (double) getCurrentAether(aspectId) / max;
+    }
+
+    public boolean canHarvestVitium() {
+        if (AetherManager.isDeadZone(world, chunkPos)) {
+            return false;
+        }
+        return getCurrentAether(VITIUM_ID) > 0;
+    }
+
+    public boolean harvestVitium(int amount) {
+        return harvestAether(VITIUM_ID, amount);
     }
 
     public boolean isEmpty() {

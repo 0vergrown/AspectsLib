@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import dev.overgrown.aspectslib.aether.AetherEvents;
 import dev.overgrown.aspectslib.aether.AetherManager;
 import dev.overgrown.aspectslib.command.AspectDebugCommand;
+import dev.overgrown.aspectslib.command.CorruptionCommand;
 import dev.overgrown.aspectslib.command.RecipeAspectCommand;
 import dev.overgrown.aspectslib.command.TagDumpCommand;
+import dev.overgrown.aspectslib.corruption.CorruptionManager;
 import dev.overgrown.aspectslib.data.AspectManager;
 import dev.overgrown.aspectslib.data.UniversalAspectManager;
 import dev.overgrown.aspectslib.recipe.RecipeAspectManager;
@@ -42,6 +44,7 @@ public class AspectsLib implements ModInitializer {
 			AspectDebugCommand.register(dispatcher, registryAccess);
 			RecipeAspectCommand.register(dispatcher, registryAccess);
 			TagDumpCommand.register(dispatcher);
+            CorruptionCommand.register(dispatcher, registryAccess);
 		});
 
 		// Sync aspect data to players when they join
@@ -71,6 +74,9 @@ public class AspectsLib implements ModInitializer {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
 				.registerReloadListener(new RecipeAspectManager());
 		RecipeAspectManager.initialize();
+
+        // Initialize corruption system
+        CorruptionManager.initialize();
 
         LOGGER.info("AspectsLib initialized!");
 	}

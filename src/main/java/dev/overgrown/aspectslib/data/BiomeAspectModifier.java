@@ -1,5 +1,6 @@
 package dev.overgrown.aspectslib.data;
 
+import dev.overgrown.aspectslib.AspectsLib;
 import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,5 +52,35 @@ public class BiomeAspectModifier {
     public static AspectData getCombinedBiomeAspects(Identifier biomeId) {
         AspectData original = BiomeAspectRegistry.get(biomeId);
         return getModifiedBiomeAspects(biomeId, original);
+    }
+
+    /**
+     * Applies all current modifications to the actual registry
+     * This makes sure modifications persist across reloads
+     */
+    public static void applyModificationsToRegistry() {
+        for (Map.Entry<Identifier, AspectData> entry : biomeModifications.entrySet()) {
+            Identifier biomeId = entry.getKey();
+            AspectData modification = entry.getValue();
+
+            // Get the original aspects and apply modifications
+            AspectData original = BiomeAspectRegistry.get(biomeId);
+            AspectData.Builder builder = new AspectData.Builder(original);
+
+            for (Identifier aspectId : modification.getAspectIds()) {
+                int modAmount = modification.getLevel(aspectId);
+                if (modAmount != 0) {
+                    builder.add(aspectId, modAmount);
+                }
+            }
+
+            // Update the registry with the modified aspects
+            BiomeAspectRegistry.update(biomeId, builder.build());
+        }
+
+        // Clear modifications after applying to avoid double-counting
+        clearModifications();
+
+        AspectsLib.LOGGER.info("Applied biome aspect modifications to registry");
     }
 }
