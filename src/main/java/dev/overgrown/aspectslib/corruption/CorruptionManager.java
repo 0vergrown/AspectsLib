@@ -28,6 +28,7 @@ public class CorruptionManager {
     // Configuration
     private static final int CORRUPTION_CHECK_INTERVAL = 200; // 10 seconds
     private static final int ASPECT_CONSUMPTION_INTERVAL = 400; // 20 seconds - slower consumption
+    private static final int AETHER_CONSUMPTION_INTERVAL = 1200; // 60 seconds - much slower aether consumption
     private static final int SCULK_SPREAD_CHANCE = 20; // 20% chance per check
     private static final int MAX_SCULK_PER_CHUNK = 64;
     private static final double PERMANENT_DEAD_ZONE_CHANCE = 0.1; // 10%
@@ -107,9 +108,11 @@ public class CorruptionManager {
             // Process corruption effects
             processCorruption(world, chunkPos, biomeId, currentBiomeAspects, currentTime);
 
-            // Check if only Vitium remains
+            // Check if only Vitium remains - start consuming aether
             if (currentTotalOtherAspects == 0 && currentVitiumAmount > 0) {
-                processAetherConsumption(world, chunkPos, biomeId);
+                if (currentTime % AETHER_CONSUMPTION_INTERVAL == 0) {
+                    processAetherConsumption(world, chunkPos, biomeId, currentTime);
+                }
             }
         } else {
             // Tainted biome (has Vitium but not enough to corrupt)
@@ -207,30 +210,48 @@ public class CorruptionManager {
         }
     }
 
-    private static void processAetherConsumption(ServerWorld world, ChunkPos chunkPos, Identifier biomeId) {
+    private static void processAetherConsumption(ServerWorld world, ChunkPos chunkPos, Identifier biomeId, long currentTime) {
         AetherChunkData aetherData = AetherManager.getAetherData(world, chunkPos);
 
-        // Check if Vitium Aether still exists before consuming
-        int vitiumAether = aetherData.getCurrentAether(VITIUM_ID);
+        // Calculate total aether remaining in the chunk
+        int totalAether = 0;
+        for (Identifier aspectId : aetherData.getAspects().keySet()) {
+            totalAether += aetherData.getCurrentAether(aspectId);
+        }
 
-        if (vitiumAether > 0) {
-            // Consume Aether - reduce Vitium Aether by 1, increase Vitium aspect by 1
-            if (aetherData.harvestAether(VITIUM_ID, 1)) {
-                BiomeAspectModifier.addBiomeModification(biomeId, VITIUM_ID, 1);
-                AspectsLib.LOGGER.debug("Consumed 1 Vitium Aether from chunk {}, remaining: {}",
-                        chunkPos, vitiumAether - 1);
+        if (totalAether > 0) {
+            // Find an aspect with aether to consume (prioritize non-Vitium aspects)
+            Identifier targetAspect = null;
+            for (Identifier aspectId : aetherData.getAspects().keySet()) {
+                if (aetherData.getCurrentAether(aspectId) > 0) {
+                    targetAspect = aspectId;
+                    if (!aspectId.equals(VITIUM_ID)) {
+                        break;
+                    }
+                }
+            }
+
+            if (targetAspect != null) {
+                // Consume 1 point of aether, increase Vitium aspect by 1
+                if (aetherData.harvestAether(targetAspect, 1)) {
+                    BiomeAspectModifier.addBiomeModification(biomeId, VITIUM_ID, 1);
+                    AspectsLib.LOGGER.debug("Consumed 1 {} Aether from chunk {}, total aether remaining: {}",
+                            targetAspect, chunkPos, totalAether - 1);
+                }
             }
         } else {
-            // Aether depleted - create dead zone
-            boolean permanent = RANDOM.nextDouble() < PERMANENT_DEAD_ZONE_CHANCE;
-            DeadZoneData deadZoneData = new DeadZoneData(permanent, world.getTime());
-            AetherManager.markAsDeadZone(world, chunkPos, deadZoneData);
+            // All aether depleted - create dead zone (only once per chunk)
+            if (!AetherManager.isDeadZone(world, chunkPos)) {
+                boolean permanent = RANDOM.nextDouble() < PERMANENT_DEAD_ZONE_CHANCE;
+                DeadZoneData deadZoneData = new DeadZoneData(permanent, world.getTime());
+                AetherManager.markAsDeadZone(world, chunkPos, deadZoneData);
 
-            // Erase all aspects from the biome
-            eraseAllAspects(biomeId);
+                // Erase all aspects from the biome
+                eraseAllAspects(biomeId);
 
-            AspectsLib.LOGGER.info("Created {} dead zone at {} in biome {}",
-                    permanent ? "permanent" : "temporary", chunkPos, biomeId);
+                AspectsLib.LOGGER.info("Created {} dead zone at {} in biome {}",
+                        permanent ? "permanent" : "temporary", chunkPos, biomeId);
+            }
         }
     }
 
