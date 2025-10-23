@@ -56,7 +56,7 @@ public class CorruptionAPI {
     public static void purifyBiome(Identifier biomeId) {
         Identifier vitiumId = AspectsLib.identifier("vitium");
 
-        // Get COMBINED aspects to get the actual current Vitium amount
+        // Use combined aspects to get the actual current Vitium amount
         AspectData currentAspects = BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
         int vitiumAmount = currentAspects.getLevel(vitiumId);
 

@@ -6,7 +6,6 @@ import dev.overgrown.aspectslib.aether.AetherManager;
 import dev.overgrown.aspectslib.aether.DeadZoneData;
 import dev.overgrown.aspectslib.data.AspectData;
 import dev.overgrown.aspectslib.data.BiomeAspectModifier;
-import dev.overgrown.aspectslib.data.BiomeAspectRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.MinecraftServer;
@@ -91,10 +90,7 @@ public class CorruptionManager {
                                                List<ChunkPos> biomesChunks,
                                                ChunkPos representativeChunk,
                                                long currentTime) {
-        // Get the base biome aspects (from the original biome data file)
-        AspectData baseBiomeAspects = BiomeAspectRegistry.get(biomeId);
-
-        // Get combined aspects (original + modifications from the modifier)
+        // Get the COMBINED biome aspects (original + modifications)
         AspectData currentBiomeAspects = BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
 
         // Check current Vitium amount
@@ -106,23 +102,36 @@ public class CorruptionManager {
             return;
         }
 
-        // Calculate total of OTHER aspects (excluding Vitium) from the BASE biome
-        int baseTotalOtherAspects = calculateTotalOtherAspects(baseBiomeAspects);
-
-        // Calculate current total of other aspects
+        // Calculate total of OTHER aspects (excluding Vitium) from the CURRENT biome data
         int currentTotalOtherAspects = calculateTotalOtherAspects(currentBiomeAspects);
 
-        // Corruption occurs when Vitium is GREATER THAN (not equal to) the ORIGINAL total
-        // So for 15 total aspects, you need 16 or more Vitium to corrupt
-        if (currentVitiumAmount > baseTotalOtherAspects) {
+        // For the base comparison, we should also use current aspects to be consistent
+        // But we need to exclude Vitium from the base calculation
+        int baseTotalForComparison = currentTotalOtherAspects;
+
+        // Log the aspects
+        if (AspectsLib.LOGGER.isDebugEnabled()) {
+            AspectsLib.LOGGER.debug("Biome {} aspects - Vitium: {}, Other aspects total: {}",
+                    biomeId, currentVitiumAmount, baseTotalForComparison);
+            for (Identifier aspectId : currentBiomeAspects.getAspectIds()) {
+                int amount = currentBiomeAspects.getLevel(aspectId);
+                if (!aspectId.equals(VITIUM_ID)) {
+                    AspectsLib.LOGGER.debug("  {}: {}", aspectId, amount);
+                }
+            }
+        }
+
+        // Corruption occurs when Vitium is GREATER THAN the total of other aspects
+        // So for 15 total other aspects, you need 16 or more Vitium to corrupt
+        if (currentVitiumAmount > baseTotalForComparison) {
             // Corrupted biome
             CorruptionState state = CORRUPTION_STATES.computeIfAbsent(biomeId,
                     id -> new CorruptionState(CorruptionState.CORRUPTED, world.getTime()));
 
             if (state.state != CorruptionState.CORRUPTED) {
                 state.state = CorruptionState.CORRUPTED;
-                AspectsLib.LOGGER.info("Biome {} became corrupted! Vitium: {} > Base aspects total: {} (Current other aspects: {})",
-                        biomeId, currentVitiumAmount, baseTotalOtherAspects, currentTotalOtherAspects);
+                AspectsLib.LOGGER.info("Biome {} became corrupted! Vitium: {} > Other aspects total: {}",
+                        biomeId, currentVitiumAmount, baseTotalForComparison);
             }
             state.lastSeen = world.getTime();
 
@@ -139,8 +148,8 @@ public class CorruptionManager {
             // Tainted biome (has Vitium but not enough to corrupt)
             updateCorruptionState(biomeId, CorruptionState.TAINTED, world.getTime());
 
-            AspectsLib.LOGGER.debug("Biome {} is tainted. Vitium: {} <= Base aspects total: {} (needs to be > {} to corrupt)",
-                    biomeId, currentVitiumAmount, baseTotalOtherAspects, baseTotalOtherAspects);
+            AspectsLib.LOGGER.debug("Biome {} is tainted. Vitium: {} <= Other aspects total: {} (needs to be > {} to corrupt)",
+                    biomeId, currentVitiumAmount, baseTotalForComparison, baseTotalForComparison);
         }
     }
 
@@ -238,8 +247,10 @@ public class CorruptionManager {
             // Apply modifications to the registry so they persist and are visible
             BiomeAspectModifier.applyModificationsToRegistry();
 
-            int newAmount = currentAmount - 1;
-            int newVitiumAmount = currentAspects.getLevel(VITIUM_ID) + 1;
+            // Get the updated aspects to verify the change
+            AspectData updatedAspects = BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
+            int newAmount = updatedAspects.getLevel(targetAspect);
+            int newVitiumAmount = updatedAspects.getLevel(VITIUM_ID);
 
             AspectsLib.LOGGER.info("Vitium consumed 1 {} from biome {}. {}: {} -> {}, Vitium: {} -> {}",
                     targetAspect, biomeId, targetAspect, currentAmount, newAmount,

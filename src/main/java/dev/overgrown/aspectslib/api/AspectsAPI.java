@@ -224,7 +224,7 @@ public class AspectsAPI {
      * @return The aspect data, or AspectData.DEFAULT if none
      */
     public static AspectData getBiomeAspectData(RegistryKey<Biome> biomeKey) {
-        return BiomeAspectRegistry.get(biomeKey);
+        return BiomeAspectModifier.getCombinedBiomeAspects(biomeKey.getValue());
     }
 
     /**
@@ -233,7 +233,7 @@ public class AspectsAPI {
      * @return The aspect data, or AspectData.DEFAULT if none
      */
     public static AspectData getBiomeAspectData(Identifier biomeId) {
-        return BiomeAspectRegistry.get(biomeId);
+        return BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
     }
 
     /**

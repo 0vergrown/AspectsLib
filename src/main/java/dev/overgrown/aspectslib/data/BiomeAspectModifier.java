@@ -50,8 +50,27 @@ public class BiomeAspectModifier {
 
     // Helper method to get combined aspects (original + modifications)
     public static AspectData getCombinedBiomeAspects(Identifier biomeId) {
+        // Get the ORIGINAL biome aspects from the registry first
         AspectData original = BiomeAspectRegistry.get(biomeId);
-        return getModifiedBiomeAspects(biomeId, original);
+
+        // Then get any modifications
+        AspectData modification = biomeModifications.get(biomeId);
+
+        // If there are no modifications, just return the original
+        if (modification == null || modification.isEmpty()) {
+            return original;
+        }
+
+        // Otherwise, combine them
+        AspectData.Builder builder = new AspectData.Builder(original);
+        for (Identifier aspectId : modification.getAspectIds()) {
+            int modAmount = modification.getLevel(aspectId);
+            if (modAmount != 0) {
+                builder.add(aspectId, modAmount);
+            }
+        }
+
+        return builder.build();
     }
 
     /**

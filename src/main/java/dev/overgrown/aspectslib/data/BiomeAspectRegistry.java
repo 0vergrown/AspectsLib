@@ -84,15 +84,37 @@ public class BiomeAspectRegistry {
     }
 
     public static AspectData get(RegistryKey<Biome> key) {
+        // First check direct key mappings
         AspectData keyData = keyToAspect.get(key);
-        if (keyData != null) {
+        if (keyData != null && !keyData.isEmpty()) {
             return keyData;
         }
-        return idToAspect.getOrDefault(key.getValue(), AspectData.DEFAULT);
+
+        // Then check identifier mappings
+        Identifier biomeId = key.getValue();
+        AspectData idData = idToAspect.get(biomeId);
+        if (idData != null && !idData.isEmpty()) {
+            return idData;
+        }
+
+        return AspectData.DEFAULT;
     }
 
+
     public static AspectData get(Identifier id) {
-        return idToAspect.getOrDefault(id, AspectData.DEFAULT);
+        AspectData data = idToAspect.get(id);
+        if (data != null && !data.isEmpty()) {
+            return data;
+        }
+
+        // Also check if there's a key mapping for this identifier
+        for (Map.Entry<RegistryKey<Biome>, AspectData> entry : keyToAspect.entrySet()) {
+            if (entry.getKey().getValue().equals(id)) {
+                return entry.getValue();
+            }
+        }
+
+        return AspectData.DEFAULT;
     }
 
     public static RegistryKey<Biome> getKey(AspectData aspect) {
