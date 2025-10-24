@@ -24,6 +24,10 @@ public class CorruptionManager {
     private static final Map<Identifier, CorruptionState> CORRUPTION_STATES = new HashMap<>();
     private static final Random RANDOM = new Random();
 
+    private record AspectConsumptionResult(Identifier aspectId, int previousAmount,
+                                           int newAmount, int vitiumBefore, int vitiumAfter) {
+    }
+
     // Configuration
     private static final int CORRUPTION_CHECK_INTERVAL = 200; // 10 seconds
     private static final int ASPECT_CONSUMPTION_INTERVAL = 400; // 20 seconds
@@ -97,6 +101,7 @@ public class CorruptionManager {
         int currentVitiumAmount = currentBiomeAspects.getLevel(VITIUM_ID);
 
         if (currentVitiumAmount == 0) {
+            updateChunkStatuses(world, biomesChunks, biomeId, CorruptionChunkData.Status.PURE, currentTime);
             // Pure biome - no Vitium, clear corruption state
             updateCorruptionState(biomeId, CorruptionState.PURE, world.getTime());
             return;
@@ -124,6 +129,7 @@ public class CorruptionManager {
         // Corruption occurs when Vitium is GREATER THAN the total of other aspects
         // So for 15 total other aspects, you need 16 or more Vitium to corrupt
         if (currentVitiumAmount > baseTotalForComparison) {
+            updateChunkStatuses(world, biomesChunks, biomeId, CorruptionChunkData.Status.CORRUPTED, currentTime);
             // Corrupted biome
             CorruptionState state = CORRUPTION_STATES.computeIfAbsent(biomeId,
                     id -> new CorruptionState(CorruptionState.CORRUPTED, world.getTime()));
@@ -136,7 +142,7 @@ public class CorruptionManager {
             state.lastSeen = world.getTime();
 
             // Process corruption effects for this biome's chunks
-            processCorruption(world, biomesChunks, biomeId, currentBiomeAspects, currentTime);
+            processCorruption(world, biomesChunks, biomeId, representativeChunk, currentBiomeAspects, currentTime);
 
             // Check if only Vitium remains - start consuming aether
             if (currentTotalOtherAspects == 0 && currentVitiumAmount > 0) {
@@ -145,11 +151,19 @@ public class CorruptionManager {
                 }
             }
         } else {
+            updateChunkStatuses(world, biomesChunks, biomeId, CorruptionChunkData.Status.TAINTED, currentTime);
             // Tainted biome (has Vitium but not enough to corrupt)
             updateCorruptionState(biomeId, CorruptionState.TAINTED, world.getTime());
 
             AspectsLib.LOGGER.debug("Biome {} is tainted. Vitium: {} <= Other aspects total: {} (needs to be > {} to corrupt)",
                     biomeId, currentVitiumAmount, baseTotalForComparison, baseTotalForComparison);
+        }
+    }
+
+    private static void updateChunkStatuses(ServerWorld world, List<ChunkPos> chunkPositions,
+                                            Identifier biomeId, CorruptionChunkData.Status status, long tick) {
+        for (ChunkPos chunkPos : chunkPositions) {
+            CorruptionDataManager.updateChunkStatus(world, chunkPos, biomeId, status, tick);
         }
     }
 
@@ -164,21 +178,27 @@ public class CorruptionManager {
     }
 
     private static void processCorruption(ServerWorld world, List<ChunkPos> biomesChunks,
-                                          Identifier biomeId, AspectData currentAspects,
+                                          Identifier biomeId, ChunkPos representativeChunk, AspectData currentAspects,
                                           long currentTime) {
         // Spread sculk in random chunks
         if (RANDOM.nextInt(100) < SCULK_SPREAD_CHANCE) {
             ChunkPos randomChunk = biomesChunks.get(RANDOM.nextInt(biomesChunks.size()));
-            spreadSculk(world, randomChunk);
+            spreadSculk(world, randomChunk, currentTime);
         }
 
         // Consume aspects ONCE per biome (not per chunk!)
         if (currentTime % ASPECT_CONSUMPTION_INTERVAL == 0) {
-            consumeAspects(biomeId, currentAspects);
+            consumeAspects(biomeId, currentAspects).ifPresent(result -> {
+                CorruptionDataManager.recordAspectDelta(world, representativeChunk, biomeId, result.aspectId(), -1, currentTime);
+                int vitiumDelta = result.vitiumAfter() - result.vitiumBefore();
+                if (vitiumDelta != 0) {
+                    CorruptionDataManager.recordAspectDelta(world, representativeChunk, biomeId, VITIUM_ID, vitiumDelta, currentTime);
+                }
+            });
         }
     }
 
-    private static void spreadSculk(ServerWorld world, ChunkPos chunkPos) {
+    private static void spreadSculk(ServerWorld world, ChunkPos chunkPos, long currentTime) {
         int sculkCount = 0;
 
         for (int i = 0; i < 3; i++) { // Try 3 times to place sculk
@@ -192,6 +212,7 @@ public class CorruptionManager {
                     world.getBlockState(pos.down()).isOpaque()) {
                 world.setBlockState(pos, Blocks.SCULK.getDefaultState());
                 sculkCount++;
+                CorruptionDataManager.recordSculkPlacement(world, chunkPos, 1, currentTime);
 
                 // Play sculk spread sound effect
                 world.playSound(
@@ -220,7 +241,7 @@ public class CorruptionManager {
         return null;
     }
 
-    private static void consumeAspects(Identifier biomeId, AspectData currentAspects) {
+    private static Optional<AspectConsumptionResult> consumeAspects(Identifier biomeId, AspectData currentAspects) {
         List<Identifier> nonVitiumAspects = new ArrayList<>();
 
         // Find all non-Vitium aspects with positive amounts
@@ -232,7 +253,7 @@ public class CorruptionManager {
 
         if (nonVitiumAspects.isEmpty()) {
             AspectsLib.LOGGER.debug("No non-Vitium aspects left to consume in biome {}", biomeId);
-            return;
+            return Optional.empty();
         }
 
         // Pick a random aspect to consume
@@ -241,6 +262,7 @@ public class CorruptionManager {
 
         if (currentAmount > 0) {
             // Reduce target aspect by 1, increase Vitium by 1
+            int previousVitiumAmount = currentAspects.getLevel(VITIUM_ID);
             BiomeAspectModifier.addBiomeModification(biomeId, targetAspect, -1);
             BiomeAspectModifier.addBiomeModification(biomeId, VITIUM_ID, 1);
 
@@ -254,14 +276,18 @@ public class CorruptionManager {
 
             AspectsLib.LOGGER.info("Vitium consumed 1 {} from biome {}. {}: {} -> {}, Vitium: {} -> {}",
                     targetAspect, biomeId, targetAspect, currentAmount, newAmount,
-                    currentAspects.getLevel(VITIUM_ID), newVitiumAmount);
+                    previousVitiumAmount, newVitiumAmount);
 
             // If aspect reaches 0, log it
             if (newAmount <= 0) {
                 AspectsLib.LOGGER.info("Aspect {} completely consumed in biome {}! Moving to next aspect.",
                         targetAspect, biomeId);
             }
+
+            return Optional.of(new AspectConsumptionResult(targetAspect, currentAmount, newAmount, previousVitiumAmount, newVitiumAmount));
         }
+
+        return Optional.empty();
     }
 
     private static void processAetherConsumption(ServerWorld world, ChunkPos chunkPos,
@@ -292,6 +318,8 @@ public class CorruptionManager {
                     BiomeAspectModifier.addBiomeModification(biomeId, VITIUM_ID, 1);
                     // Apply modifications to registry
                     BiomeAspectModifier.applyModificationsToRegistry();
+                    CorruptionDataManager.recordAetherConsumption(world, chunkPos, biomeId, targetAspect, 1, currentTime);
+                    CorruptionDataManager.recordAspectDelta(world, chunkPos, biomeId, VITIUM_ID, 1, currentTime);
 
                     AspectsLib.LOGGER.info("Consumed 1 {} Aether from chunk {}, total aether remaining: {}",
                             targetAspect, chunkPos, totalAether - 1);
@@ -306,6 +334,7 @@ public class CorruptionManager {
 
                 // Erase all aspects from the biome
                 eraseAllAspects(biomeId);
+                CorruptionDataManager.updateChunkStatus(world, chunkPos, biomeId, CorruptionChunkData.Status.REGENERATING, currentTime);
 
                 AspectsLib.LOGGER.info("Created {} dead zone at {} in biome {}",
                         permanent ? "permanent" : "temporary", chunkPos, biomeId);

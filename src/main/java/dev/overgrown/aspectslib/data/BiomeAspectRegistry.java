@@ -15,8 +15,9 @@ public class BiomeAspectRegistry {
     public static AspectData register(RegistryKey<Biome> key, AspectData aspect) {
         if(keyToAspect.containsKey(key)) {
             AspectData existing = keyToAspect.get(key);
-            existing.addAspect(aspect);
-            return aspect;
+            AspectData combined = existing.addAspect(aspect);
+            keyToAspect.put(key, combined);
+            return combined;
         }
         keyToAspect.put(key, aspect);
         return aspect;
@@ -25,27 +26,20 @@ public class BiomeAspectRegistry {
     public static AspectData register(Identifier id, AspectData aspect) {
         if(idToAspect.containsKey(id)) {
             AspectData existing = idToAspect.get(id);
-            existing.addAspect(aspect);
-            return aspect;
+            AspectData combined = existing.addAspect(aspect);
+            idToAspect.put(id, combined);
+            return combined;
         }
         idToAspect.put(id, aspect);
         return aspect;
     }
 
     public static void update(RegistryKey<Biome> key, AspectData aspect) {
-        if(keyToAspect.containsKey(key)) {
-            AspectData old = keyToAspect.get(key);
-            keyToAspect.remove(key);
-        }
-        register(key, aspect);
+        keyToAspect.put(key, aspect);
     }
 
     public static void update(Identifier id, AspectData aspect) {
-        if(idToAspect.containsKey(id)) {
-            AspectData old = idToAspect.get(id);
-            idToAspect.remove(id);
-        }
-        register(id, aspect);
+        idToAspect.put(id, aspect);
     }
 
     protected static void remove(RegistryKey<Biome> key) {
