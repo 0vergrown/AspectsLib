@@ -241,6 +241,7 @@ public class CorruptionManager {
 
         if (currentAmount > 0) {
             // Reduce target aspect by 1, increase Vitium by 1
+            int previousVitiumAmount = currentAspects.getLevel(VITIUM_ID);
             BiomeAspectModifier.addBiomeModification(biomeId, targetAspect, -1);
             BiomeAspectModifier.addBiomeModification(biomeId, VITIUM_ID, 1);
 
@@ -254,7 +255,7 @@ public class CorruptionManager {
 
             AspectsLib.LOGGER.info("Vitium consumed 1 {} from biome {}. {}: {} -> {}, Vitium: {} -> {}",
                     targetAspect, biomeId, targetAspect, currentAmount, newAmount,
-                    currentAspects.getLevel(VITIUM_ID), newVitiumAmount);
+                    previousVitiumAmount, newVitiumAmount);
 
             // If aspect reaches 0, log it
             if (newAmount <= 0) {

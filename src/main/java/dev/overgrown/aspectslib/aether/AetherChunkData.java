@@ -147,6 +147,8 @@ public class AetherChunkData {
     }
 
     public void recoverAether() {
+        if (world == null) return;
+        
         if (AetherManager.isDeadZone(world, chunkPos)) {
             recoverDeadZone();
             return;

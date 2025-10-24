@@ -244,8 +244,14 @@ public class AspectData {
          * @param level  The level to add.
          */
         public void add(Identifier aspectId, int level) {
-            if (level > 0) {
-                this.aspects.merge(aspectId, level, Integer::sum);
+            if (level == 0) {
+                return;
+            }
+            int newLevel = this.aspects.getOrDefault(aspectId, 0) + level;
+            if (newLevel <= 0) {
+                this.aspects.removeInt(aspectId);
+            } else {
+                this.aspects.put(aspectId, newLevel);
             }
         }
 
@@ -258,7 +264,7 @@ public class AspectData {
         public void addByName(String aspectName, int level) {
             Identifier aspectId = AspectManager.NAME_TO_ID.get(aspectName);
             if (aspectId != null) {
-                this.aspects.put(aspectId, this.aspects.getOrDefault(aspectId, 0) + level);
+                add(aspectId, level);
             }
         }
 

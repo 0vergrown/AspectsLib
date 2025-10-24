@@ -1,6 +1,7 @@
 package dev.overgrown.aspectslib.data;
 
 import dev.overgrown.aspectslib.AspectsLib;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +10,27 @@ public class BiomeAspectModifier {
     private static final Map<Identifier, AspectData> biomeModifications = new HashMap<>();
 
     public static void addBiomeModification(Identifier biomeId, Identifier aspectId, int amount) {
-        AspectData current = biomeModifications.getOrDefault(biomeId, AspectData.DEFAULT);
-        AspectData.Builder builder = new AspectData.Builder(current);
-        builder.add(aspectId, amount);
-        biomeModifications.put(biomeId, builder.build());
+        if (amount == 0) {
+            return;
+        }
+
+        AspectData current = biomeModifications.get(biomeId);
+        Object2IntOpenHashMap<Identifier> updatedMap = current != null
+                ? new Object2IntOpenHashMap<>(current.getMap())
+                : new Object2IntOpenHashMap<>();
+
+        int newAmount = updatedMap.getOrDefault(aspectId, 0) + amount;
+        if (newAmount == 0) {
+            updatedMap.removeInt(aspectId);
+        } else {
+            updatedMap.put(aspectId, newAmount);
+        }
+
+        if (updatedMap.isEmpty()) {
+            biomeModifications.remove(biomeId);
+        } else {
+            biomeModifications.put(biomeId, new AspectData(new Object2IntOpenHashMap<>(updatedMap)));
+        }
     }
 
     public static void drainAllAspects(Identifier biomeId, int amount) {
