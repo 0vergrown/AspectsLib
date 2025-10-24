@@ -3,7 +3,11 @@ package dev.overgrown.aspectslib.corruption;
 import dev.overgrown.aspectslib.AspectsLib;
 import dev.overgrown.aspectslib.data.AspectData;
 import dev.overgrown.aspectslib.data.BiomeAspectModifier;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ChunkPos;
+
+import java.util.Collection;
 
 public class CorruptionAPI {
 
@@ -77,5 +81,24 @@ public class CorruptionAPI {
         // Use combined aspects
         AspectData aspects = BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
         return aspects.getLevel(vitiumId);
+    }
+
+    /**
+     * Gets stored corruption tracking data for a chunk, if any has been recorded.
+     * @param world The server world the chunk belongs to
+     * @param chunkPos The chunk position
+     * @return The saved corruption data for the chunk, or {@code null} if none exists yet
+     */
+    public static CorruptionChunkData getChunkData(ServerWorld world, ChunkPos chunkPos) {
+        return CorruptionDataManager.getChunkData(world, chunkPos);
+    }
+
+    /**
+     * Gets a read-only view of all tracked corruption chunks for a world.
+     * @param world The server world to query
+     * @return Collection of chunk data entries; empty if nothing has been tracked yet
+     */
+    public static Collection<CorruptionChunkData> getTrackedChunks(ServerWorld world) {
+        return CorruptionDataManager.getAll(world);
     }
 }
