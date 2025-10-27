@@ -7,8 +7,10 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.biome.Biome;
 
 public class CorruptionCommand {
@@ -16,16 +18,16 @@ public class CorruptionCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         dispatcher.register(CommandManager.literal("corruption")
                 .requires(source -> source.hasPermissionLevel(2))
-                .executes(CorruptionCommand::checkCurrentBiome)
+                .executes(CorruptionCommand::checkCurrentChunk)
                 .then(CommandManager.literal("purify")
-                        .executes(CorruptionCommand::purifyCurrentBiome))
+                        .executes(CorruptionCommand::purifyCurrentChunk))
                 .then(CommandManager.literal("force")
                         .then(CommandManager.argument("amount", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, 1000))
                                 .executes(CorruptionCommand::forceCorruption)))
         );
     }
 
-    private static int checkCurrentBiome(CommandContext<ServerCommandSource> context) {
+    private static int checkCurrentChunk(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
 
         if (!(source.getEntity() instanceof ServerPlayerEntity player)) {
@@ -33,25 +35,34 @@ public class CorruptionCommand {
             return 0;
         }
 
-        Biome biome = player.getWorld().getBiome(player.getBlockPos()).value();
-        Identifier biomeId = player.getWorld().getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME).getId(biome);
+        ServerWorld world = (ServerWorld) player.getWorld();
+        ChunkPos chunkPos = player.getChunkPos();
+        
+        Biome biome = world.getBiome(player.getBlockPos()).value();
+        Identifier biomeId = world.getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME).getId(biome);
 
         if (biomeId == null) {
             source.sendError(Text.literal("Could not determine current biome"));
             return 0;
         }
 
-        int corruptionState = CorruptionAPI.getBiomeCorruptionState(biomeId);
-        int vitiumAmount = CorruptionAPI.getVitiumAmount(biomeId);
+        boolean isPure = CorruptionAPI.isChunkPure(world, chunkPos);
+        boolean isTainted = CorruptionAPI.isChunkTainted(world, chunkPos);
+        boolean isCorrupted = CorruptionAPI.isChunkCorrupted(world, chunkPos);
+        int vitiumAmount = CorruptionAPI.getVitiumAmount(world, chunkPos);
 
         String state;
-        switch (corruptionState) {
-            case 0 -> state = "§aPure";
-            case 1 -> state = "§eTainted";
-            case 2 -> state = "§cCorrupted";
-            default -> state = "§7Unknown";
+        if (isCorrupted) {
+            state = "§cCorrupted";
+        } else if (isTainted) {
+            state = "§eTainted";
+        } else if (isPure) {
+            state = "§aPure";
+        } else {
+            state = "§7Unknown";
         }
 
+        source.sendFeedback(() -> Text.literal("Chunk: " + chunkPos.toString()), false);
         source.sendFeedback(() -> Text.literal("Biome: " + biomeId.toString()), false);
         source.sendFeedback(() -> Text.literal("State: " + state), false);
         source.sendFeedback(() -> Text.literal("Vitium: " + vitiumAmount), false);
@@ -59,7 +70,7 @@ public class CorruptionCommand {
         return 1;
     }
 
-    private static int purifyCurrentBiome(CommandContext<ServerCommandSource> context) {
+    private static int purifyCurrentChunk(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
 
         if (!(source.getEntity() instanceof ServerPlayerEntity player)) {
@@ -67,24 +78,24 @@ public class CorruptionCommand {
             return 0;
         }
 
-        Biome biome = player.getWorld().getBiome(player.getBlockPos()).value();
-        Identifier biomeId = player.getWorld().getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME).getId(biome);
+        ServerWorld world = (ServerWorld) player.getWorld();
+        ChunkPos chunkPos = player.getChunkPos();
+        
+        Biome biome = world.getBiome(player.getBlockPos()).value();
+        Identifier biomeId = world.getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME).getId(biome);
 
         if (biomeId == null) {
             source.sendError(Text.literal("Could not determine current biome"));
             return 0;
         }
 
-        int vitiumBefore = CorruptionAPI.getVitiumAmount(biomeId);
-        CorruptionAPI.purifyBiome(biomeId);
+        int vitiumBefore = CorruptionAPI.getVitiumAmount(world, chunkPos);
+        CorruptionAPI.purifyChunk(world, chunkPos);
 
-        // Apply modifications to registry to make them permanent
-        dev.overgrown.aspectslib.data.BiomeAspectModifier.applyModificationsToRegistry();
+        int vitiumAfter = CorruptionAPI.getVitiumAmount(world, chunkPos);
 
-        int vitiumAfter = CorruptionAPI.getVitiumAmount(biomeId);
-
-        source.sendFeedback(() -> Text.literal("§aPurified biome: " + biomeId +
-                " (Removed " + (vitiumBefore - vitiumAfter) + " Vitium)"), true);
+        source.sendFeedback(() -> Text.literal("§aPurified chunk region: " + chunkPos + " (biome: " + biomeId + 
+                ") - Removed " + (vitiumBefore - vitiumAfter) + " Vitium"), true);
 
         return 1;
     }
@@ -98,16 +109,19 @@ public class CorruptionCommand {
             return 0;
         }
 
-        Biome biome = player.getWorld().getBiome(player.getBlockPos()).value();
-        Identifier biomeId = player.getWorld().getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME).getId(biome);
+        ServerWorld world = (ServerWorld) player.getWorld();
+        ChunkPos chunkPos = player.getChunkPos();
+        
+        Biome biome = world.getBiome(player.getBlockPos()).value();
+        Identifier biomeId = world.getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME).getId(biome);
 
         if (biomeId == null) {
             source.sendError(Text.literal("Could not determine current biome"));
             return 0;
         }
 
-        CorruptionAPI.forceCorruption(biomeId, amount);
-        source.sendFeedback(() -> Text.literal("§cForced corruption in biome: " + biomeId + " (+" + amount + " Vitium)"), true);
+        CorruptionAPI.forceCorruption(world, chunkPos, amount);
+        source.sendFeedback(() -> Text.literal("§cForced corruption in chunk region: " + chunkPos + " (biome: " + biomeId + ") - Added " + amount + " Vitium"), true);
 
         return 1;
     }

@@ -1,5 +1,6 @@
 package dev.overgrown.aspectslib.corruption;
 
+import dev.overgrown.aspectslib.data.AspectData;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public final class CorruptionDataManager {
     private static final String CORRUPTION_STATE_KEY = "aspectslib_corruption";
+    private static final String CHUNK_ASPECT_STORAGE_KEY = "aspectslib_chunk_aspects";
 
     private CorruptionDataManager() {
     }
@@ -93,5 +95,31 @@ public final class CorruptionDataManager {
 
     public static CorruptionChunkData getChunkData(ServerWorld world, ChunkPos chunkPos) {
         return getWorldState(world).get(chunkPos);
+    }
+
+    public static ChunkAspectStorage getChunkAspectStorage(ServerWorld world) {
+        PersistentStateManager manager = world.getPersistentStateManager();
+        return manager.getOrCreate(
+                ChunkAspectStorage::fromNbt,
+                ChunkAspectStorage::new,
+                CHUNK_ASPECT_STORAGE_KEY
+        );
+    }
+
+    public static AspectData getChunkAspects(ServerWorld world, ChunkPos chunkPos, Identifier biomeId) {
+        return getChunkAspectStorage(world).getChunkAspects(chunkPos, biomeId);
+    }
+
+    public static void modifyChunkAspect(ServerWorld world, ChunkPos chunkPos, Identifier biomeId, 
+                                        Identifier aspectId, int delta) {
+        getChunkAspectStorage(world).modifyChunkAspect(chunkPos, biomeId, aspectId, delta);
+    }
+
+    public static void modifyRegionAspects(ServerWorld world, Collection<ChunkPos> region, Identifier biomeId,
+                                          Identifier aspectId, int delta) {
+        ChunkAspectStorage storage = getChunkAspectStorage(world);
+        for (ChunkPos chunkPos : region) {
+            storage.modifyChunkAspect(chunkPos, biomeId, aspectId, delta);
+        }
     }
 }

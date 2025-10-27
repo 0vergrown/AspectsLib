@@ -2,84 +2,119 @@ package dev.overgrown.aspectslib.corruption;
 
 import dev.overgrown.aspectslib.AspectsLib;
 import dev.overgrown.aspectslib.data.AspectData;
-import dev.overgrown.aspectslib.data.BiomeAspectModifier;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.biome.Biome;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class CorruptionAPI {
 
     /**
-     * Gets the corruption state of a biome
-     * @param biomeId The biome identifier
-     * @return 0 = Pure, 1 = Tainted, 2 = Corrupted
+     * Checks if a chunk is pure (no Vitium)
      */
-    public static int getBiomeCorruptionState(Identifier biomeId) {
-        return CorruptionManager.getCorruptionState(biomeId);
+    public static boolean isChunkPure(ServerWorld world, ChunkPos chunkPos) {
+        return CorruptionManager.isChunkPure(world, chunkPos);
     }
 
     /**
-     * Checks if a biome is pure (no Vitium)
+     * Checks if a chunk is tainted (has Vitium but not corrupted)
      */
-    public static boolean isBiomePure(Identifier biomeId) {
-        return CorruptionManager.isBiomePure(biomeId);
+    public static boolean isChunkTainted(ServerWorld world, ChunkPos chunkPos) {
+        return CorruptionManager.isChunkTainted(world, chunkPos);
     }
 
     /**
-     * Checks if a biome is tainted (has Vitium but not corrupted)
+     * Checks if a chunk is corrupted (Vitium dominates)
      */
-    public static boolean isBiomeTainted(Identifier biomeId) {
-        return CorruptionManager.isBiomeTainted(biomeId);
+    public static boolean isChunkCorrupted(ServerWorld world, ChunkPos chunkPos) {
+        return CorruptionManager.isChunkCorrupted(world, chunkPos);
     }
 
     /**
-     * Checks if a biome is corrupted (Vitium dominates)
-     */
-    public static boolean isBiomeCorrupted(Identifier biomeId) {
-        return CorruptionManager.isBiomeCorrupted(biomeId);
-    }
-
-    /**
-     * Forces a biome to become corrupted by adding Vitium
-     * @param biomeId The biome identifier
+     * Forces a chunk region to become corrupted by adding Vitium
+     * @param world The server world
+     * @param chunkPos The chunk position
      * @param vitiumAmount The amount of Vitium to add
      */
-    public static void forceCorruption(Identifier biomeId, int vitiumAmount) {
-        Identifier vitiumId = AspectsLib.identifier("vitium");
-        BiomeAspectModifier.addBiomeModification(biomeId, vitiumId, vitiumAmount);
+    public static void forceCorruption(ServerWorld world, ChunkPos chunkPos, int vitiumAmount) {
+        // Get the biome for this chunk
+        BlockPos centerPos = chunkPos.getStartPos().add(8, 64, 8);
+        Biome biome = world.getBiome(centerPos).value();
+        Identifier biomeId = world.getRegistryManager()
+                .get(net.minecraft.registry.RegistryKeys.BIOME)
+                .getId(biome);
 
-        AspectsLib.LOGGER.info("Forced corruption on biome {} by adding {} Vitium", biomeId, vitiumAmount);
+        if (biomeId == null) {
+            AspectsLib.LOGGER.warn("Could not determine biome for chunk {}", chunkPos);
+            return;
+        }
+
+        // Find the connected region
+        Set<ChunkPos> region = BiomeRegionDetector.findConnectedBiomeChunks(world, chunkPos, biomeId, 32);
+
+        Identifier vitiumId = AspectsLib.identifier("vitium");
+        CorruptionDataManager.modifyRegionAspects(world, region, biomeId, vitiumId, vitiumAmount);
+
+        AspectsLib.LOGGER.info("Forced corruption on chunk region {} (biome {}) by adding {} Vitium", chunkPos, biomeId, vitiumAmount);
     }
 
     /**
-     * Purifies a biome by removing all Vitium
-     * @param biomeId The biome identifier
+     * Purifies a chunk region by removing all Vitium
+     * @param world The server world
+     * @param chunkPos The chunk position
      */
-    public static void purifyBiome(Identifier biomeId) {
+    public static void purifyChunk(ServerWorld world, ChunkPos chunkPos) {
+        // Get the biome for this chunk
+        BlockPos centerPos = chunkPos.getStartPos().add(8, 64, 8);
+        Biome biome = world.getBiome(centerPos).value();
+        Identifier biomeId = world.getRegistryManager()
+                .get(net.minecraft.registry.RegistryKeys.BIOME)
+                .getId(biome);
+
+        if (biomeId == null) {
+            AspectsLib.LOGGER.warn("Could not determine biome for chunk {}", chunkPos);
+            return;
+        }
+
+        // Find the connected region
+        Set<ChunkPos> region = BiomeRegionDetector.findConnectedBiomeChunks(world, chunkPos, biomeId, 32);
+
         Identifier vitiumId = AspectsLib.identifier("vitium");
 
-        // Use combined aspects to get the actual current Vitium amount
-        AspectData currentAspects = BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
+        // Get current Vitium amount for the region
+        AspectData currentAspects = CorruptionDataManager.getChunkAspects(world, chunkPos, biomeId);
         int vitiumAmount = currentAspects.getLevel(vitiumId);
 
         if (vitiumAmount > 0) {
-            // Remove all Vitium
-            BiomeAspectModifier.addBiomeModification(biomeId, vitiumId, -vitiumAmount);
-            AspectsLib.LOGGER.info("Purified biome {} by removing {} Vitium", biomeId, vitiumAmount);
+            // Remove all Vitium from the region
+            CorruptionDataManager.modifyRegionAspects(world, region, biomeId, vitiumId, -vitiumAmount);
+            AspectsLib.LOGGER.info("Purified chunk region {} (biome {}) by removing {} Vitium", chunkPos, biomeId, vitiumAmount);
         } else {
-            AspectsLib.LOGGER.info("Biome {} has no Vitium to purify", biomeId);
+            AspectsLib.LOGGER.info("Chunk region {} (biome {}) has no Vitium to purify", chunkPos, biomeId);
         }
     }
 
     /**
-     * Gets the amount of Vitium in a biome
+     * Gets the amount of Vitium in a chunk's region
      */
-    public static int getVitiumAmount(Identifier biomeId) {
+    public static int getVitiumAmount(ServerWorld world, ChunkPos chunkPos) {
+        // Get the biome for this chunk
+        BlockPos centerPos = chunkPos.getStartPos().add(8, 64, 8);
+        Biome biome = world.getBiome(centerPos).value();
+        Identifier biomeId = world.getRegistryManager()
+                .get(net.minecraft.registry.RegistryKeys.BIOME)
+                .getId(biome);
+
+        if (biomeId == null) {
+            return 0;
+        }
+
         Identifier vitiumId = AspectsLib.identifier("vitium");
-        // Use combined aspects
-        AspectData aspects = BiomeAspectModifier.getCombinedBiomeAspects(biomeId);
+        AspectData aspects = CorruptionDataManager.getChunkAspects(world, chunkPos, biomeId);
         return aspects.getLevel(vitiumId);
     }
 
