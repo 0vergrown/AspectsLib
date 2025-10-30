@@ -1,12 +1,11 @@
 package dev.overgrown.aspectslib.aether;
 
 import dev.overgrown.aspectslib.data.AspectData;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-
-import java.util.Map;
 
 public class AetherAPI {
 
@@ -26,8 +25,8 @@ public class AetherAPI {
         }
 
         AetherChunkData aetherData = AetherManager.getAetherData(world, chunkPos);
-        for (Map.Entry<Identifier, Integer> entry : cost.getMap().entrySet()) {
-            if (!aetherData.canHarvest(entry.getKey(), entry.getValue())) {
+        for (Object2IntMap.Entry<Identifier> entry : cost.getMap().object2IntEntrySet()) {
+            if (!aetherData.canHarvest(entry.getKey(), entry.getIntValue())) {
                 return false;
             }
         }
@@ -52,16 +51,16 @@ public class AetherAPI {
         AetherChunkData aetherData = AetherManager.getAetherData(world, chunkPos);
 
         // First, check if we can harvest all required aspects
-        for (Map.Entry<Identifier, Integer> entry : cost.getMap().entrySet()) {
-            if (!aetherData.canHarvest(entry.getKey(), entry.getValue())) {
+        for (Object2IntMap.Entry<Identifier> entry : cost.getMap().object2IntEntrySet()) {
+            if (!aetherData.canHarvest(entry.getKey(), entry.getIntValue())) {
                 return false;
             }
         }
 
         // Then, harvest all aspects (transactional)
         boolean allHarvested = true;
-        for (Map.Entry<Identifier, Integer> entry : cost.getMap().entrySet()) {
-            if (!aetherData.harvestAether(entry.getKey(), entry.getValue())) {
+        for (Object2IntMap.Entry<Identifier> entry : cost.getMap().object2IntEntrySet()) {
+            if (!aetherData.harvestAether(entry.getKey(), entry.getIntValue())) {
                 allHarvested = false;
                 break;
             }
