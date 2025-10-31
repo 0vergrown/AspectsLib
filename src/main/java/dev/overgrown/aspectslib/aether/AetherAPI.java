@@ -69,6 +69,22 @@ public class AetherAPI {
         return allHarvested;
     }
 
+    public static boolean hasTotalAether(World world, BlockPos pos, double requiredRU) {
+        if (isDeadZone(world, pos)) {
+            return false;
+        }
+
+        ChunkPos chunkPos = new ChunkPos(pos);
+        AetherChunkData aetherData = AetherManager.getAetherData(world, chunkPos);
+
+        double totalAether = 0;
+        for (Identifier aspectId : aetherData.getAspectIds()) {
+            totalAether += aetherData.getCurrentAether(aspectId);
+        }
+
+        return totalAether >= requiredRU;
+    }
+
     /**
      * Gets the current Aether level for a specific aspect at a position
      */
