@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,7 +22,13 @@ public class AetherWorldState extends PersistentState {
     }
 
     public AetherChunkData getOrCreateChunkData(ChunkPos chunkPos, World world) {
-        this.world = world;
+        // Ensure that on first request of a chunk, the world reference is set for all chunks loaded from disk
+        if (this.world == null) {
+            this.world = world;
+            for (AetherChunkData aetherChunkData : chunkData.values()) {
+                aetherChunkData.setWorld(this.world);
+            }
+        }
         return chunkData.computeIfAbsent(chunkPos, pos -> {
             AetherChunkData data = new AetherChunkData(world, pos);
             markDirty();
