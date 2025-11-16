@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.Set;
 import static dev.overgrown.aspectslib.corruption.CorruptionManager.VITIUM_ID;
 
 public class AetherChunkData {
-    private final World world;
+    private World world;
     private final ChunkPos chunkPos;
     private final Map<Identifier, Integer> currentAether;
     private final Map<Identifier, Integer> maxAether;
@@ -52,6 +53,10 @@ public class AetherChunkData {
         this.totalExpendedThisHour = totalExpendedThisHour;
         this.hourStartTime = hourStartTime;
         this.initialized = true;
+    }
+
+    protected void setWorld(@NotNull World world) {
+        this.world = world;
     }
 
     private void initializeFromBiome() {
@@ -306,7 +311,8 @@ public class AetherChunkData {
         }
 
         return new AetherChunkData(
-                null, // World will be set when needed
+                // World ist set separately when the first chunk data is requested from AetherWorldState
+                null,
                 new ChunkPos(0, 0), // Position will be set by caller
                 currentAether,
                 maxAether,
